@@ -12,4 +12,14 @@ if [ "$1" == "" ]; then
 
 fi
 
+if [ "$1" == "install" ]; then
+
+    cp fadvise /usr/bin/
+    cp fallocate /usr/bin/
+    cp fincore /usr/bin/
+    cp showrlimit /usr/bin/
+    #gcc src/c/waste_memory.c -o waste_memory
+
+fi
+
 # FIXME make a deb now.
