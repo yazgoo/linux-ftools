@@ -2,6 +2,8 @@
 
 # simple/stupid make until I setup a Makefile
 
+DIR=/usr/bin/
+
 if [ "$1" == "" ]; then
 
     gcc src/c/fadvise.c -o fadvise
@@ -14,10 +16,10 @@ fi
 
 if [ "$1" == "install" ]; then
 
-    cp fadvise /usr/bin/
-    cp fallocate /usr/bin/
-    cp fincore /usr/bin/
-    cp showrlimit /usr/bin/
+    cp fadvise $DIR
+    cp fallocate $DIR
+    cp fincore $DIR
+    cp showrlimit $DIR
     #gcc src/c/waste_memory.c -o waste_memory
 
 fi
