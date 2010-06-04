@@ -9,9 +9,10 @@
 #include <fcntl.h>
 #include <stdlib.h>
 
-// fallocate.c -o fallocate && ./fallocate foo.test 100000000
-
 /** 
+
+SYNTAX: fallocate file length
+
 fallocate() allows the caller to directly manipulate the allocated disk space
 for the file referred to by fd for the byte range starting at offset and
 continuing for len bytes.
@@ -38,16 +39,12 @@ implementing that function.
 Because allocation is done in block size chunks, fallocate() may allocate a
 larger range than that which was specified.
 
-Return Value
-
-fallocate() returns zero on success, or an error number on failure. Note that
-errno is not set.
 */
 
 int main(int argc, char *argv[]) {
 
     if ( argc != 3 ) {
-        printf( "ERROR: fallocate file length" );
+        fprintf( stderr, "SYNTAX: fallocate file length" );
         return 1;
     }
 
@@ -82,6 +79,7 @@ int main(int argc, char *argv[]) {
     loff_t len = increase;
 
     //int mode = 0;
+    //TODO: make this a command line option.
     int mode = FALLOC_FL_KEEP_SIZE;
 
     //long result = fallocate( fd, mode, offset, len );

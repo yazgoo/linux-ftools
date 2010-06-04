@@ -6,11 +6,16 @@
 #include <unistd.h>
 #include <sys/mman.h>
 
+struct fincore_result 
+{
+    long cached_size;
+};
+
 /**
 
 fincore [options] files...
 
-  --pages=false      Don't print pages
+  --pages=false      Do not print pages
   --summarize        When comparing multiple files, print a summary report
   --only-cached      Only print stats for files that are actually in cache.
 
@@ -110,11 +115,6 @@ int main(int argc, char *argv[]) {
     }
 
 }
-
-struct fincore_result 
-{
-    long cached_size;
-};
 
 void fincore(char* path, int pages, int summarize, int only_cached, struct fincore_result *result ) {
 
