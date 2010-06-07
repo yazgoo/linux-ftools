@@ -83,6 +83,8 @@ void fincore(char* path, int pages, int summarize, int only_cached, struct finco
 
     int foobar = (int)ceil( required_pages );
 
+    printf( "FIXME1\n" );
+
     if ( foobar != -100.0 ) {
         printf( "hello world\n" );
     }
