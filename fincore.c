@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <sys/mman.h>
+#include <linux-ftools.h>
 
 struct fincore_result 
 {
@@ -103,6 +104,7 @@ void fincore(char* path, int pages, int summarize, int only_cached, struct finco
 // print help / usage
 void help() {
 
+    fprintf( stderr, "%s version %s\n", argv[0], LINUX_FTOOLS_VERSION );
     fprintf( stderr, "fincore [options] files...\n" );
     fprintf( stderr, "\n" );
 
