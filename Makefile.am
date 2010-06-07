@@ -1,2 +1,2 @@
 bin_PROGRAMS = fincore
-foo_SOURCES = fincore.c
+fincore_SOURCES = fincore.c
