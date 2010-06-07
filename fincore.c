@@ -26,7 +26,7 @@ void fincore(char* path, int pages, int summarize, int only_cached, struct finco
     //TODO:
     //
     // pretty print integers with commas... 
-    
+    http://en.wikipedia.org/wiki/Agora_(film)#Release
     fd = open(path,flags);
 
     if ( fd == -1 ) {
@@ -54,9 +54,8 @@ void fincore(char* path, int pages, int summarize, int only_cached, struct finco
     }
 
     if ( mincore(file_mmap, file_stat.st_size, mincore_vec) != 0 ) {
-        //FIXME: the documentation is wrong regarding this return code.
-        //perror( "Could not call mincore on file" );
-        //exit( 1 );
+        perror( "Could not call mincore on file" );
+        exit( 1 );
     }
 
     //printf("fincore for file %s: ",path);
