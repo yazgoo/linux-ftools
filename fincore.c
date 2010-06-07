@@ -41,13 +41,10 @@ void fincore(char* path, int pages, int summarize, int only_cached, struct finco
 
     file_mmap = mmap((void *)0, file_stat.st_size, PROT_NONE, MAP_SHARED, fd, 0);
     
-    /*
-    //FIXME: the documentation is wrong regarding this return code.
     if ( file_mmap == MAP_FAILED ) {
         perror( "Could not mmap file" );
         return 1;        
     }
-    */
 
     mincore_vec = calloc(1, (file_stat.st_size+page_size-1)/page_size);
 
