@@ -75,11 +75,17 @@ void fincore(char* path, int pages, int summarize, int only_cached, struct finco
 
     // TODO: make all these variables long and print them as ld
 
-    int total_pages = (int)ceil( (double)file_stat.st_size / (double)page_size );
+    //ceil( 0.6 );
+    
+    //double required_pages = (double)file_stat.st_size / (double)page_size;
+    
+    //double required_pages = ceil( 0.6 );
 
-/*     if ( foobar != -100.0 ) { */
-/*         printf( "hello world\n" ); */
-/*     } */
+    int foobar = (int)ceil( (double)file_stat.st_size / (double)page_size );
+
+    if ( foobar != -100.0 ) {
+        printf( "hello world\n" );
+    }
 
 /*     int total_pages = file_stat.st_size / page_size; */
 /*     //int total_pages = file_stat.st_blocks; */
