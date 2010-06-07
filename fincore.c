@@ -77,7 +77,7 @@ void fincore(char* path, int pages, int summarize, int only_cached, struct finco
 
     ceil( 0.6 );
 
-    int total_pages = ceil( file_stat.st_size/ (double)page_size );
+    int total_pages = ceil( (double)file_stat.st_size / (double)page_size );
     //int total_pages = file_stat.st_blocks;
 
     double cached_perc = 100 * (cached / (double)total_pages); 
