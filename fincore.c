@@ -76,8 +76,8 @@ void fincore(char* path, int pages, int summarize, int only_cached, struct finco
     // TODO: make all these variables long and print them as ld
 
     ceil( 0.6 );
-
-    double required_pages = ;
+    
+    //double required_pages = ;
 
     int foo = (int)ceil( (double)file_stat.st_size / (double)page_size );
 
