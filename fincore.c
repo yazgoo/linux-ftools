@@ -83,7 +83,7 @@ void fincore(char* path, int pages, int summarize, int only_cached, struct finco
 
     int foobar = (int)ceil( required_pages );
 
-    if ( foobar >= -1.0 ) {
+    if ( foobar != -100.0 ) {
         printf( "hello world\n" );
     }
 
