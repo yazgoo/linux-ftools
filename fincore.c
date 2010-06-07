@@ -79,9 +79,9 @@ void fincore(char* path, int pages, int summarize, int only_cached, struct finco
     
     //double required_pages = (double)file_stat.st_size / (double)page_size;
     
-    double required_pages = (double)file_stat.st_size / (double)page_size;
+    double cat = (double)file_stat.st_size / (double)page_size;
 
-    double cat = 0.6;
+    //double cat = 0.6;
 
     int foobar = (int)ceil( cat );
 
