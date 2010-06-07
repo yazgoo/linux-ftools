@@ -45,7 +45,8 @@ larger range than that which was specified.
 int main(int argc, char *argv[]) {
 
     if ( argc != 3 ) {
-        fprintf( stderr, "SYNTAX: fallocate file length" );
+        fprintf( stderr, sprintf( "%s version %s\n", argv[0], LINUX_FTOOLS_VERSION ) );
+        fprintf( stderr, "SYNTAX: fallocate file length\n" );
         return 1;
     }
 
