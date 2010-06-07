@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <linux-ftools.h>
+#include <math.h>
 
 struct fincore_result 
 {
@@ -74,8 +75,8 @@ void fincore(char* path, int pages, int summarize, int only_cached, struct finco
 
     // TODO: make all these variables long and print them as ld
 
-    //int total_pages = (file_stat.st_size/page_size);
-    int total_pages = file_stat.st_blocks;
+    int total_pages = ceil(file_stat.st_size/page_size);
+    //int total_pages = file_stat.st_blocks;
 
     double cached_perc = 100 * (cached / (double)total_pages); 
 
