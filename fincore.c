@@ -78,12 +78,8 @@ void fincore(char* path, int pages, int summarize, int only_cached, struct finco
     //ceil( 0.6 );
     
     //double required_pages = (double)file_stat.st_size / (double)page_size;
-    
-    double cat = (double)file_stat.st_size / (double)page_size;
 
-    //double cat = 0.6;
-
-    int foobar = (int)ceil( cat );
+    int foobar = (int)ceil( (double)file_stat.st_size / (double)page_size );
 
     if ( foobar != -100.0 ) {
         printf( "hello world\n" );
