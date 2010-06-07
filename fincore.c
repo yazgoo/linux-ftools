@@ -58,8 +58,6 @@ void fincore(char* path, int pages, int summarize, int only_cached, struct finco
         exit( 1 );
     }
 
-    //printf("fincore for file %s: ",path);
-
     int cached = 0;
     int printed = 0;
     for (page_index = 0; page_index <= file_stat.st_size/page_size; page_index++) {
@@ -76,7 +74,8 @@ void fincore(char* path, int pages, int summarize, int only_cached, struct finco
 
     // TODO: make all these variables long and print them as ld
 
-    int total_pages = (file_stat.st_size/page_size);
+    //int total_pages = (file_stat.st_size/page_size);
+    int total_pages = file_stat.st_blocks;
 
     double cached_perc = 100 * (cached / (double)total_pages); 
 
