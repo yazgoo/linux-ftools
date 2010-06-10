@@ -5,6 +5,8 @@
 
 aclocal && automake && autoconf
 
+automake might need --add-missing the first time.
+
 # make and install it
 
 make clean && make && make install
