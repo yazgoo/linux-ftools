@@ -179,6 +179,7 @@ int main(int argc, char *argv[]) {
         
         printf( "---\n" );
 
+        //TODO: add more metrics including total size... 
         printf( "total cached size: %ld\n", total_cached_size );
 
     }
