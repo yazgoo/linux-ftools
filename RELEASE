@@ -3,7 +3,7 @@
 
 # regen configure
 
-aclocal && automake --add-missing && autoconf
+aclocal && automake && autoconf
 
 # make and install it
 
