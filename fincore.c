@@ -30,31 +30,32 @@ void fincore(char* path, int pages, int summarize, int only_cached, struct finco
     fd = open(path,flags);
 
     if ( fd == -1 ) {
-        perror( NULL );
+        perror( sprintf( "%s: can not open file", path ) );
         return;
     }
 
     if ( fstat( fd, &file_stat ) < 0 ) {
-        perror( "Could not stat file" );
+        perror( sprintf( "%s: Could not stat file", path ) );
         return;
     }
 
     file_mmap = mmap((void *)0, file_stat.st_size, PROT_NONE, MAP_SHARED, fd, 0);
     
     if ( file_mmap == MAP_FAILED ) {
-        perror( "Could not mmap file" );
+        perror( sprintf( "%s: Could not mmap file", path ) );
         return;        
     }
 
     mincore_vec = calloc(1, (file_stat.st_size+page_size-1)/page_size);
 
     if ( mincore_vec == NULL ) {
+        //something is really wrong here.  Just exit.
         perror( "Could not calloc" );
-        return;
+        exit( 1 );
     }
 
     if ( mincore(file_mmap, file_stat.st_size, mincore_vec) != 0 ) {
-        perror( "Could not call mincore on file" );
+        perror( sprintf( "%s: Could not call mincore on file", path ) );
         exit( 1 );
     }
 
@@ -80,8 +81,9 @@ void fincore(char* path, int pages, int summarize, int only_cached, struct finco
     long cached_size = (double)cached * (double)page_size;
 
     if ( only_cached == 0 || cached > 0 ) {
-        printf( "stats for %s: file size=%ld , total pages=%d , cached pages=%d , cached size=%ld, cached perc=%f \n", 
+        printf( "%s %ld %d %d %ld %f\n", 
                 path, file_stat.st_size, total_pages, cached, cached_size, cached_perc );
+
     }
 
     free(mincore_vec);
@@ -161,6 +163,8 @@ int main(int argc, char *argv[]) {
     }
 
     long total_cached_size = 0;
+
+    printf("filename size\ttotal pages\tcached pages\tcached size\tcached perc\n");
 
     for( ; fidx < argc; ++fidx ) {
 
