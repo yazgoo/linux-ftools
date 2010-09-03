@@ -7,6 +7,7 @@
 #include <sys/mman.h>
 #include <linux-ftools.h>
 #include <math.h>
+#include <errno.h>
 
 struct fincore_result 
 {
