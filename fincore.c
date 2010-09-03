@@ -87,7 +87,7 @@ void fincore(char* path, int pages, int summarize, int only_cached, struct finco
                 path, file_stat.st_size, total_pages, cached, cached_size, cached_perc );
         */
 
-        printf( "%s\t%ld\t%d\t%d\t%ld\t%f\n", 
+        printf( "%15s\t%ld\t%d\t%d\t%ld\t%f\n", 
                 path, file_stat.st_size, total_pages, cached, cached_size, cached_perc );
 
     }
