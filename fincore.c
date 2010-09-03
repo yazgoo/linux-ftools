@@ -32,6 +32,7 @@ void fincore(char* path, int pages, int summarize, int only_cached, struct finco
     if ( fd == -1 ) {
 
         perror( "can not open file" );
+        fprintf( stderr, "%s: can not open file: ", path, strerror(errno) );
 
         //perror( sprintf( "%s: can not open file", path ) );
 
