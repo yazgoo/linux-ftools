@@ -170,7 +170,7 @@ int main(int argc, char *argv[]) {
 
     long total_cached_size = 0;
 
-    printf("filename size\ttotal_pages\tcached_pages\tcached_size\tcached_perc\n");
+    printf( "filename\tsize\ttotal_pages\tcached_pages\tcached_size\tcached_perc\n" );
 
     for( ; fidx < argc; ++fidx ) {
 
