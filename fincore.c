@@ -142,8 +142,8 @@ void fincore(char* path,
 
     }
 
-    printf ( "r0: %d", r0 );
-    printf ( "r50: %d", r50 );
+    printf ( "r0: %d\n", r0 );
+    printf ( "r50: %d\n", r50 );
 
     if ( printed ) printf("\n");
 
