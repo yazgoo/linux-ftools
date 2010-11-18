@@ -286,8 +286,8 @@ int main(int argc, char *argv[]) {
 
     char format[] = "%-80s %15s %15s %15s %15s %15s %15s %15s\n";
 
-    printf( format, "filename", "size", "total_pages", "cached_pages", "cached_size", "cached_perc", "r0", "r1" );
-    printf( format, "--------", "----", "-----------", "------------", "-----------", "-----------", "--", "--" );
+    printf( format, "filename", "size", "total_pages", "cached_pages", "cached_size", "cached_perc", "r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9" );
+    printf( format, "--------", "----", "-----------", "------------", "-----------", "-----------", "--", "--" , "--", "--" , "--", "--" , "--", "--" , "--", "--" );
 
     for( ; fidx < argc; ++fidx ) {
 
