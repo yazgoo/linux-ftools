@@ -151,7 +151,7 @@ void foobar( int value ) {
 
 }
 
-char* _ltoa( off_t value ) {
+char *_ltoa( off_t value ) {
 
     char buff[100];
 
