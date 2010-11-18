@@ -116,7 +116,7 @@ void fincore(char* path,
 
         //foobar( 100 );
 
-        printf( "%-120s %15s\n",
+        printf( "%-120s \n",
                 path
                  
                 
