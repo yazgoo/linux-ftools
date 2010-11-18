@@ -121,10 +121,22 @@ void fincore(char* path,
     for (page_index = 0; page_index <= file_stat.st_size/page_size; page_index++) {
         if (mincore_vec[page_index]&1) {
             ++cached;
+
             if ( pages ) {
                 printf("%lu ", (unsigned long)page_index);
                 ++printed;
             }
+
+            int region = (page_index / ptr ) - 1;
+
+            switch( region ) 
+                {
+                case 0:
+                    ++r0;
+                case 1:
+                    ++r50;
+                }
+
         }
     }
 
@@ -145,8 +157,8 @@ void fincore(char* path,
                 _itoa( cached ),  
                 _itoa( cached_size ), 
                 _dtoa( cached_perc ),
-                "",
-                "");
+                _itoa( r1 ),
+                _itoa( r50 ) );
 
     }
 
