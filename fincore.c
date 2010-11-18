@@ -116,7 +116,7 @@ void fincore(char* path,
     int r8 = 0;
     int r9 = 0;
 
-    int ptr = total_pages / 2;
+    int ptr = total_pages / 10;
 
     //r0.nr_pages = 
 
@@ -138,6 +138,22 @@ void fincore(char* path,
                     ++r0;
                 case 1:
                     ++r1;
+                case 2:
+                    ++r2;
+                case 3:
+                    ++r3;
+                case 4:
+                    ++r4;
+                case 5:
+                    ++r5;
+                case 6:
+                    ++r6;
+                case 7:
+                    ++r7;
+                case 8:
+                    ++r8;
+                case 9:
+                    ++r9;
                 }
 
         }
@@ -258,7 +274,7 @@ int main(int argc, char *argv[]) {
 
     char format[] = "%-80s %15s %15s %15s %15s %15s %15s %15s\n";
 
-    printf( format, "filename", "size", "total_pages", "cached_pages", "cached_size", "cached_perc", " 0", "50" );
+    printf( format, "filename", "size", "total_pages", "cached_pages", "cached_size", "cached_perc", "r0", "r1" );
     printf( format, "--------", "----", "-----------", "------------", "-----------", "-----------", "--", "--" );
 
     for( ; fidx < argc; ++fidx ) {
