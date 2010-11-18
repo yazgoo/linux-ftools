@@ -112,7 +112,7 @@ void fincore(char* path,
     int printed = 0;
 
     struct r0;
-    struct r50
+    struct r50;
 
     for (page_index = 0; page_index <= file_stat.st_size/page_size; page_index++) {
         if (mincore_vec[page_index]&1) {
