@@ -116,7 +116,7 @@ void fincore(char* path,
 
         printf( "%-120s %15s\n",
                 path,
-                _ltoa( (long)file_stat.st_size )
+                _ltoa( file_stat.st_size )
                 
                 
                 );
@@ -150,7 +150,7 @@ char* _itoa( int value ) {
 
 }
 
-char* _ltoa( long value ) {
+char* _ltoa( off_t value ) {
 
     char buff[100];
 
