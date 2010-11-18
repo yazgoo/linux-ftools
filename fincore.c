@@ -123,19 +123,16 @@ void fincore(char* path,
     long cached_size = (double)cached * (double)page_size;
 
     if ( only_cached == 0 || cached > 0 ) {
-        
-        printf( "FIXME: %s\n", 
-                path );
 
-        /*
         printf( format, 
                 path, 
                 _ltoa( file_stat.st_size ), 
                 _itoa( total_pages ), 
                 _itoa( cached ),  
                 _itoa( cached_size ), 
-                _dtoa( cached_perc ) );
-        */
+                _dtoa( cached_perc ),
+                "",
+                "");
 
     }
 
@@ -229,10 +226,10 @@ int main(int argc, char *argv[]) {
 
     long total_cached_size = 0;
 
-    char format[] = "%-80s %15s %15s %15s %15s %15s\n";
+    char format[] = "%-80s %15s %15s %15s %15s %15s %5s %5s\n";
 
-    printf( format, "filename", "size", "total_pages", "cached_pages", "cached_size", "cached_perc" );
-    printf( format, "--------", "----", "-----------", "------------", "-----------", "-----------" );
+    printf( format, "filename", "size", "total_pages", "cached_pages", "cached_size", "cached_perc", " 0", "50" );
+    printf( format, "--------", "----", "-----------", "------------", "-----------", "-----------", "--"  "--");
 
     for( ; fidx < argc; ++fidx ) {
 
