@@ -123,6 +123,9 @@ void fincore(char* path,
     long cached_size = (double)cached * (double)page_size;
 
     if ( only_cached == 0 || cached > 0 ) {
+        
+        printf( "FIXME: %s\n", 
+                path );
 
         printf( format, 
                 path, 
