@@ -145,9 +145,9 @@ void foobar( int value ) {
 
     char buff[100];
 
-    //sprintf( buff, "%d", value );
+    sprintf( buff, "%d", value );
 
-    //return buff;
+    return buff;
 
 }
 
