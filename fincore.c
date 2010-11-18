@@ -116,7 +116,7 @@ void fincore(char* path,
     int r8 = 0;
     int r9 = 0;
 
-    printf( "total_pages: %d", total_pages );
+    //printf( "total_pages: %d", total_pages );
     fflush( stdout );
 
     int ptr = (int)(total_pages / (float)10);
