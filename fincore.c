@@ -182,8 +182,8 @@ void help() {
  */
 int main(int argc, char *argv[]) {
 
-        __itoa( 100 );
-
+    __itoa( 100 );
+        
     if ( argc == 1 ) {
         help();
         exit(1);
