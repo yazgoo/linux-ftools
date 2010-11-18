@@ -9,6 +9,8 @@
 #include <math.h>
 #include <errno.h>
 
+char format[] = "%-80s %15s %15s %15s %15s %15s %15s %15s\n";
+
 struct fincore_result 
 {
     long cached_size;
@@ -39,11 +41,6 @@ char *_dtoa( double value ) {
     return buff;
 
 }
-
-struct region {
-    int count;
-    int nr_pages;
-};
 
 void fincore(char* path, 
              int pages, 
