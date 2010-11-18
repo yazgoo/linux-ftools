@@ -10,7 +10,7 @@
 #include <errno.h>
 
 char STR_FORMAT[] =  "%-80s %15s %15s %15s %15s %15s %15s %15s\n";
-char DATA_FORMAT[] = "%-80s %15ld %15d %15d %15d %15f %15d %15d\n";
+char DATA_FORMAT[] = "%-80s %15ld %15d %15d %15d %15f %15d %15d %15d %15d %15d %15d %15d %15d %15d %15d\n";
 
 struct fincore_result 
 {
@@ -182,7 +182,15 @@ void fincore(char* path,
                 cached_size , 
                 cached_perc ,
                 r0 ,
-                r1 );
+                r1 , 
+                r2 , 
+                r3 , 
+                r4 , 
+                r5 , 
+                r6 ,
+                r7 ,
+                r8 ,
+                r9 );
 
     }
 
