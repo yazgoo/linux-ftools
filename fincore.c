@@ -165,13 +165,13 @@ void fincore(char* path,
 
         printf( DATA_FORMAT, 
                 path, 
-                _ltoa( file_stat.st_size ), 
-                _itoa( total_pages ), 
-                _itoa( cached ),  
-                _itoa( cached_size ), 
-                _dtoa( cached_perc ),
-                _itoa( r0 ),
-                _itoa( r50 ) );
+                file_stat.st_size , 
+                total_pages , 
+                cached ,  
+                cached_size , 
+                cached_perc ,
+                r0 ,
+                r50 );
 
     }
 
