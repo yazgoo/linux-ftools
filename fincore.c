@@ -41,7 +41,7 @@ char *_dtoa( double value ) {
 }
 
 struct region {
-    int count = 0;
+    int count;
     int nr_pages;
 };
 
@@ -111,8 +111,12 @@ void fincore(char* path,
     int cached = 0;
     int printed = 0;
 
-    struct r0;
-    struct r50;
+    int r0;
+    int r50;
+
+    int ptr = total_pages / 2;
+
+    //r0.nr_pages = 
 
     for (page_index = 0; page_index <= file_stat.st_size/page_size; page_index++) {
         if (mincore_vec[page_index]&1) {
