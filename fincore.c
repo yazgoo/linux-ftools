@@ -20,8 +20,6 @@ void fincore(char* path,
              int only_cached, 
              struct fincore_result *result ) {
 
-    __itoa( 100 );
-
     int fd;
     struct stat file_stat;
     void *file_mmap;
@@ -182,6 +180,8 @@ void help() {
  * see README
  */
 int main(int argc, char *argv[]) {
+
+    __itoa( 100 );
 
     if ( argc == 1 ) {
         help();
