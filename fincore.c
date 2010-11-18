@@ -186,6 +186,7 @@ void fincore(char* path,
     if ( only_cached == 0 || cached > 0 ) {
 
         printf( "FIXME: r9: %d \n" , r9 );
+        printf( "FIXME: ptr: %d \n" , ptr );
         printf( "FIXME: r9 perc: %f \n" , perc( r9, ptr ) );
 
         printf( DATA_FORMAT, 
