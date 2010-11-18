@@ -111,8 +111,8 @@ void fincore(char* path,
     int cached = 0;
     int printed = 0;
 
-    int r0;
-    int r50;
+    int r0  = 0;
+    int r50 = 0;
 
     int ptr = total_pages / 2;
 
@@ -134,10 +134,8 @@ void fincore(char* path,
                 {
                 case 0:
                     ++r0;
-                    break;
                 case 1:
                     ++r50;
-                    break;
                 }
 
         }
