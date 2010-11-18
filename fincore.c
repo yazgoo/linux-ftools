@@ -34,9 +34,8 @@ void fincore(char* path,
              int pages, 
              int summarize, 
              int only_cached, 
-             struct fincore_result *result ) {
-
-    printf( "FIXME: %s\n", _itoa( 100 ) );
+             struct fincore_result *result, 
+             char* format ) {
 
     int fd;
     struct stat file_stat;
@@ -230,7 +229,7 @@ int main(int argc, char *argv[]) {
 
     long total_cached_size = 0;
 
-    char* format = "%-120s %15s %15s %15s %15s %15s\n";
+    char format[] = "%-120s %15s %15s %15s %15s %15s\n";
 
     printf( format, 
             "filename", "size", "total_pages", "cached_pages", "cached_size", "cached_perc" );
@@ -241,7 +240,7 @@ int main(int argc, char *argv[]) {
 
         struct fincore_result result;
 
-        fincore( path, pages, summarize, only_cached , &result );
+        fincore( path, pages, summarize, only_cached , &result, &format );
 
         total_cached_size += result.cached_size;
 
