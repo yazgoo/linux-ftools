@@ -30,7 +30,7 @@ char *_ltoa( long value ) {
 
 }
 
-char *_ftoa( long value ) {
+char *_dtoa( double value ) {
 
     static char buff[100];
 
@@ -135,7 +135,7 @@ void fincore(char* path,
                 _itoa( total_pages ), 
                 _itoa( cached ),  
                 _itoa( cached_size ), 
-                _ftoa( cached_perc ) );
+                _dtoa( cached_perc ) );
 
         //sprintf( "%s", file_stat.st_size );
 
