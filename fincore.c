@@ -47,8 +47,7 @@ void fincore(char* path,
              int pages, 
              int summarize, 
              int only_cached, 
-             struct fincore_result *result, 
-             char* format ) {
+             struct fincore_result *result ) {
 
     int fd;
     struct stat file_stat;
@@ -293,7 +292,7 @@ int main(int argc, char *argv[]) {
 
         struct fincore_result result;
 
-        fincore( path, pages, summarize, only_cached , &result, &format );
+        fincore( path, pages, summarize, only_cached , &result );
 
         total_cached_size += result.cached_size;
 
