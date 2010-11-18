@@ -20,6 +20,8 @@ void fincore(char* path,
              int only_cached, 
              struct fincore_result *result ) {
 
+    printf( "FIXME: %s\n", __itoa( 100 ) );
+
     int fd;
     struct stat file_stat;
     void *file_mmap;
