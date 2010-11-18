@@ -139,11 +139,11 @@ void fincore(char* path,
 
 }
 
-char* itoa( int value ) {
+char* itoa( long value ) {
 
     char* buff ;
 
-    sprintf( &buff, "%s", value );
+    sprintf( &buff, "%ld", value );
     
     return buff;
 
