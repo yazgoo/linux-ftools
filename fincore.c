@@ -181,7 +181,7 @@ void help() {
  */
 int main(int argc, char *argv[]) {
 
-    __itoa( 100 );
+    printf( "FIXME: %s", __itoa( 100 ) );
 
     if ( argc == 1 ) {
         help();
