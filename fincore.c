@@ -157,7 +157,7 @@ void fincore(char* path,
                 _itoa( cached ),  
                 _itoa( cached_size ), 
                 _dtoa( cached_perc ),
-                _itoa( r1 ),
+                _itoa( r0 ),
                 _itoa( r50 ) );
 
     }
