@@ -114,8 +114,7 @@ void fincore(char* path,
         */
         //sprintf( "%s", file_stat.st_size );
 
-        char foo[] = _itoa( total_pages )
-            ;
+        char foo[] = _itoa( 100 );
 
         printf( "%-120s %15s\n",
                 path
