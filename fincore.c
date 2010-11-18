@@ -43,7 +43,7 @@ char *_dtoa( double value ) {
 struct region {
     int count;
     int nr_pages;
-}
+};
 
 void fincore(char* path, 
              int pages, 
