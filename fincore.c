@@ -115,9 +115,11 @@ void fincore(char* path,
         */
 
 
-        printf( "%-120s %15s\n", 
-                path,
-                sprintf( "%ld", file_stat.st_size )
+        sprintf( "%ld", file_stat.st_size );
+
+        printf( "%-120s\n", 
+                path
+                
                 );
 
 
