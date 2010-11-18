@@ -121,8 +121,8 @@ void fincore(char* path,
     printf( "total_pages: %d", total_pages );
     fflush( stdout );
 
-    if ( total_pages > 0 )
-        ptr = (int)(total_pages / (float)10);
+    //if ( total_pages > 0 )
+    //    ptr = (int)(total_pages / (float)10);
 
     //r0.nr_pages = 
 
