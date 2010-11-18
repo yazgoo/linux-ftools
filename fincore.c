@@ -114,8 +114,6 @@ void fincore(char* path,
         */
         //sprintf( "%s", file_stat.st_size );
 
-        _ltoa( 100L );
-
         printf( "%-120s\n",
                 path
                 
