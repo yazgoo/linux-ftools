@@ -134,7 +134,7 @@ void fincore(char* path,
                 {
                 case 0:
                     ++r0;
-                case 1:
+                    //case 1:
                     //++r50;
                 }
 
