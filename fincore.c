@@ -116,7 +116,8 @@ void fincore(char* path,
     int r8 = 0;
     int r9 = 0;
 
-    int ptr = total_pages / 10;
+    //int ptr = total_pages / 10;
+    int ptr = 4;
 
     //r0.nr_pages = 
 
