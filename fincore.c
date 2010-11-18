@@ -129,7 +129,7 @@ void fincore(char* path,
                 path, file_stat.st_size, total_pages, cached, cached_size, cached_perc );
         */
 
-        printf( "%-120s %15s %15s %15s %15s %15s\n", 
+        printf( format, 
                 path, 
                 _ltoa( file_stat.st_size ), 
                 _itoa( total_pages ), 
