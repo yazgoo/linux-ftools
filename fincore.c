@@ -40,6 +40,11 @@ char *_dtoa( double value ) {
 
 }
 
+struct region {
+    int count = 0;
+    int nr_pages = 0;
+}
+
 void fincore(char* path, 
              int pages, 
              int summarize, 
@@ -101,8 +106,14 @@ void fincore(char* path,
         exit( 1 );
     }
 
+    int total_pages = (int)ceil( (double)file_stat.st_size / (double)page_size );
+
     int cached = 0;
     int printed = 0;
+
+    struct r0;
+    struct r50
+
     for (page_index = 0; page_index <= file_stat.st_size/page_size; page_index++) {
         if (mincore_vec[page_index]&1) {
             ++cached;
@@ -117,7 +128,6 @@ void fincore(char* path,
 
     // TODO: make all these variables long and print them as ld
 
-    int total_pages = (int)ceil( (double)file_stat.st_size / (double)page_size );
     double cached_perc = 100 * (cached / (double)total_pages); 
 
     long cached_size = (double)cached * (double)page_size;
