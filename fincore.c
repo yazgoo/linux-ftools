@@ -104,7 +104,7 @@ void fincore(char* path,
         */
 
 
-        /*
+        
         printf( "%-120s %15s %15s %15s %15s %15s\n", 
                 path, 
                 file_stat.st_size, 
@@ -112,15 +112,14 @@ void fincore(char* path,
                 cached, 
                 cached_size, 
                 cached_perc );
-        */
 
 
-        sprintf( "%s", file_stat.st_size );
+        //sprintf( "%s", file_stat.st_size );
 
-        printf( "%-120s\n", 
-                path
+/*         printf( "%-120s\n",  */
+/*                 path */
                 
-                );
+/*                 ); */
 
 
     }
