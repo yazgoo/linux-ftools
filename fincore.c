@@ -14,6 +14,32 @@ struct fincore_result
     long cached_size;
 };
 
+char *foobar( int value ) {
+
+    static char buff[100];
+
+    sprintf( buff, "%d", value );
+
+    return buff;
+
+}
+
+char *__itoa(int n) {
+	static char retbuf[100];
+	sprintf(retbuf, "%d", n);
+	return retbuf;
+}
+
+char *_ltoa( off_t value ) {
+
+    static char buff[100];
+
+    sprintf( buff, "%ld", value );
+
+    return buff;
+
+}
+
 void fincore(char* path, 
              int pages, 
              int summarize, 
@@ -136,32 +162,6 @@ void fincore(char* path,
         close(fd);
 
     return;
-
-}
-
-char *foobar( int value ) {
-
-    static char buff[100];
-
-    sprintf( buff, "%d", value );
-
-    return buff;
-
-}
-
-char *__itoa(int n) {
-	static char retbuf[100];
-	sprintf(retbuf, "%d", n);
-	return retbuf;
-}
-
-char *_ltoa( off_t value ) {
-
-    static char buff[100];
-
-    sprintf( buff, "%ld", value );
-
-    return buff;
 
 }
 
