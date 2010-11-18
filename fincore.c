@@ -110,7 +110,7 @@ void fincore(char* path,
     int printed = 0;
 
     int r0  = 0;
-    int r50 = 0;
+    int r1 = 0;
 
     int ptr = total_pages / 2;
 
@@ -132,16 +132,13 @@ void fincore(char* path,
                 {
                 case 0:
                     ++r0;
-                    //case 1:
-                    //++r50;
+                case 1:
+                    ++r1;
                 }
 
         }
 
     }
-
-    printf ( "r0: %d\n", r0 );
-    printf ( "r50: %d\n", r50 );
 
     if ( printed ) printf("\n");
 
@@ -162,7 +159,7 @@ void fincore(char* path,
                 _itoa( cached_size ), 
                 _dtoa( cached_perc ),
                 _itoa( r0 ),
-                _itoa( r50 ) );
+                _itoa( r1 ) );
         */
 
         printf( DATA_FORMAT, 
@@ -173,7 +170,7 @@ void fincore(char* path,
                 cached_size , 
                 cached_perc ,
                 r0 ,
-                r50 );
+                r1 );
 
     }
 
