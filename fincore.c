@@ -43,6 +43,15 @@ char *_dtoa( double value ) {
 
 }
 
+float perc( int val, int range ) {
+    
+    if ( range == 0 )
+        return 0;
+
+    return ( val / range ) * 100;
+
+}
+
 void fincore(char* path, 
              int pages, 
              int summarize, 
@@ -190,7 +199,7 @@ void fincore(char* path,
                 r6 ,
                 r7 ,
                 r8 ,
-                (r9 / ptr) * 100 );
+                perc(r9, ptr) );
 
     }
 
