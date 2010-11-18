@@ -141,7 +141,7 @@ void fincore(char* path,
 
 }
 
-char* foobar( long value ) {
+void foobar( long value ) {
 
     //char* buff ;
 
@@ -149,7 +149,7 @@ char* foobar( long value ) {
     
     //return buff;
 
-    return "asdf";
+    //return "asdf";
 
 }
 
