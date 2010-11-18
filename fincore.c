@@ -143,11 +143,13 @@ void fincore(char* path,
 
 char* foobar( long value ) {
 
-    char* buff ;
+    //char* buff ;
 
-    sprintf( &buff, "%ld", value );
+    //sprintf( &buff, "%ld", value );
     
-    return buff;
+    //return buff;
+
+    return "asdf";
 
 }
 
