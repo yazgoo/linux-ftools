@@ -43,12 +43,14 @@ char *_dtoa( double value ) {
 
 }
 
-float perc( int val, int range ) {
+double perc( int val, int range ) {
     
     if ( range == 0 )
         return 0;
 
-    return ( val / range ) * 100;
+
+    double result = ( val / range ) * 100;
+    return result;
 
 }
 
