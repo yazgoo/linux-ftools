@@ -116,13 +116,10 @@ void fincore(char* path,
     int r8 = 0;
     int r9 = 0;
 
-    int ptr = 0;
-
     printf( "total_pages: %d", total_pages );
     fflush( stdout );
 
-    //if ( total_pages > 0 )
-    //    ptr = (int)(total_pages / (float)10);
+    int ptr = (int)(total_pages / (float)10);
 
     //r0.nr_pages = 
 
@@ -136,32 +133,33 @@ void fincore(char* path,
                 ++printed;
             }
 
-            int region = (page_index / ptr ) - 1;
+            if ( ptr > 0 ) {
+                int region = (page_index / ptr ) - 1;
 
-            switch( region ) 
-                {
-                case 0:
-                    ++r0;
-                case 1:
-                    ++r1;
-                case 2:
-                    ++r2;
-                case 3:
-                    ++r3;
-                case 4:
-                    ++r4;
-                case 5:
-                    ++r5;
-                case 6:
-                    ++r6;
-                case 7:
-                    ++r7;
-                case 8:
-                    ++r8;
-                case 9:
-                    ++r9;
-                }
-
+                switch( region ) 
+                    {
+                    case 0:
+                        ++r0;
+                    case 1:
+                        ++r1;
+                    case 2:
+                        ++r2;
+                    case 3:
+                        ++r3;
+                    case 4:
+                        ++r4;
+                    case 5:
+                        ++r5;
+                    case 6:
+                        ++r6;
+                    case 7:
+                        ++r7;
+                    case 8:
+                        ++r8;
+                    case 9:
+                        ++r9;
+                    }
+            }
         }
 
     }
