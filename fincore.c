@@ -114,7 +114,7 @@ void fincore(char* path,
         */
         //sprintf( "%s", file_stat.st_size );
 
-        foobar( 100L );
+        _ltoa( 100L );
 
         printf( "%-120s\n",
                 path
@@ -141,15 +141,23 @@ void fincore(char* path,
 
 }
 
-void foobar( long value ) {
+char* _itoa( int value ) {
 
-    //char* buff ;
+    char buff[100];
 
-    //sprintf( &buff, "%ld", value );
-    
-    //return buff;
+    sprintf( buff, "%d", value );
 
-    //return "asdf";
+    return buff;
+
+}
+
+char* _ltoa( long value ) {
+
+    char buff[100];
+
+    sprintf( buff, "%ld", value );
+
+    return buff;
 
 }
 
