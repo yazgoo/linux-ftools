@@ -143,7 +143,7 @@ void fincore(char* path,
 
 void foobar( int value ) {
 
-    char buff[100];
+    static char buff[100];
 
     sprintf( buff, "%d", value );
 
