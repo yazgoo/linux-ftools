@@ -229,7 +229,7 @@ int main(int argc, char *argv[]) {
     char format[] = "%-80s %15s %15s %15s %15s %15s %5s %5s\n";
 
     printf( format, "filename", "size", "total_pages", "cached_pages", "cached_size", "cached_perc", " 0", "50" );
-    printf( format, "--------", "----", "-----------", "------------", "-----------", "-----------", "--"  "--");
+    printf( format, "--------", "----", "-----------", "------------", "-----------", "-----------", "--", "--" );
 
     for( ; fidx < argc; ++fidx ) {
 
