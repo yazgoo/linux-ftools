@@ -9,7 +9,7 @@
 #include <math.h>
 #include <errno.h>
 
-char STR_FORMAT[] =  "%-80s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s\n";
+char STR_FORMAT[] =  "%-80s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15f\n";
 char DATA_FORMAT[] = "%-80s %15ld %15d %15d %15d %15f %15d %15d %15d %15d %15d %15d %15d %15d %15d %15d\n";
 
 struct fincore_result 
@@ -104,6 +104,7 @@ void fincore(char* path,
     int cached = 0;
     int printed = 0;
 
+    //TODO: I could have made this an array with 10 positions.
     int r0 = 0;
     int r1 = 0;
     int r2 = 0;
@@ -180,7 +181,7 @@ void fincore(char* path,
                 cached ,  
                 cached_size , 
                 cached_perc ,
-                r0 ,
+                r0,
                 r1 , 
                 r2 , 
                 r3 , 
@@ -189,7 +190,7 @@ void fincore(char* path,
                 r6 ,
                 r7 ,
                 r8 ,
-                r9 );
+                (r9 / ptr) * 100 );
 
     }
 
