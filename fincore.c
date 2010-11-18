@@ -103,7 +103,7 @@ void fincore(char* path,
                 path, file_stat.st_size, total_pages, cached, cached_size, cached_perc );
         */
 
-        printf( format, 
+        printf( "%-120s %15s %15s %15s %15s %15s\n", 
                 path, 
                 file_stat.st_size, 
                 total_pages, 
@@ -203,7 +203,7 @@ int main(int argc, char *argv[]) {
 
     long total_cached_size = 0;
 
-    char* format = "%-80s %15s %15s %15s %15s %15s\n";
+    char* format = "%-120s %15s %15s %15s %15s %15s\n";
 
     printf( format, 
             "filename", "size", "total_pages", "cached_pages", "cached_size", "cached_perc" );
