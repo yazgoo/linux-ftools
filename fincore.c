@@ -127,6 +127,7 @@ void fincore(char* path,
         printf( "FIXME: %s\n", 
                 path );
 
+        /*
         printf( format, 
                 path, 
                 _ltoa( file_stat.st_size ), 
@@ -134,6 +135,7 @@ void fincore(char* path,
                 _itoa( cached ),  
                 _itoa( cached_size ), 
                 _dtoa( cached_perc ) );
+        */
 
     }
 
