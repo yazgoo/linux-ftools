@@ -20,11 +20,21 @@ char *_itoa(int n) {
 	return retbuf;
 }
 
-char *_ltoa( off_t value ) {
+char *_ltoa( long value ) {
 
     static char buff[100];
 
     sprintf( buff, "%ld", value );
+
+    return buff;
+
+}
+
+char *_ftoa( long value ) {
+
+    static char buff[100];
+
+    sprintf( buff, "%f", value );
 
     return buff;
 
@@ -119,25 +129,26 @@ void fincore(char* path,
                 path, file_stat.st_size, total_pages, cached, cached_size, cached_perc );
         */
 
-        /*
         printf( "%-120s %15s %15s %15s %15s %15s\n", 
                 path, 
-                file_stat.st_size, 
-                total_pages, 
-                cached, 
-                cached_size, 
-                cached_perc );
-        */
+                _ltoa( file_stat.st_size ), 
+                _itoa( total_pages ), 
+                _itoa( cached ),  
+                _itoa( cached_size ), 
+                _ftoa( cached_perc ) );
+
         //sprintf( "%s", file_stat.st_size );
 
-        printf( "format string is: %s" , format );
+        //printf( "format string is: %s" , format );
 
+        /*
         printf( "%-120s %15s %15s \n",
                 path,
                 _ltoa( file_stat.st_size ),
                 _itoa( total_pages )
 
                 );
+        */
 
     }
 
