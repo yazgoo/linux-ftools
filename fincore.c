@@ -9,7 +9,7 @@
 #include <math.h>
 #include <errno.h>
 
-char format[] = "%-80s %15s %15s %15s %15s %15s %15s %15s\n";
+char STATIC_FORMAT[] = "%-80s %15s %15s %15s %15s %15s %15s %15s\n";
 
 struct fincore_result 
 {
