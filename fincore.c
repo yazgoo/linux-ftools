@@ -153,6 +153,7 @@ void fincore(char* path,
 
     if ( only_cached == 0 || cached > 0 ) {
 
+        /*
         printf( format, 
                 path, 
                 _ltoa( file_stat.st_size ), 
@@ -162,6 +163,7 @@ void fincore(char* path,
                 _dtoa( cached_perc ),
                 _itoa( r0 ),
                 _itoa( r50 ) );
+        */
 
         printf( DATA_FORMAT, 
                 path, 
