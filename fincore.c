@@ -41,7 +41,7 @@ char *_dtoa( double value ) {
 }
 
 struct region {
-    int count;
+    int count = 0;
     int nr_pages;
 };
 
