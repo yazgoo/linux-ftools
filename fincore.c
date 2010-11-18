@@ -14,17 +14,7 @@ struct fincore_result
     long cached_size;
 };
 
-char *foobar( int value ) {
-
-    static char buff[100];
-
-    sprintf( buff, "%d", value );
-
-    return buff;
-
-}
-
-char *__itoa(int n) {
+char *_itoa(int n) {
 	static char retbuf[100];
 	sprintf(retbuf, "%d", n);
 	return retbuf;
@@ -46,7 +36,7 @@ void fincore(char* path,
              int only_cached, 
              struct fincore_result *result ) {
 
-    printf( "FIXME: %s\n", __itoa( 100 ) );
+    printf( "FIXME: %s\n", _itoa( 100 ) );
 
     int fd;
     struct stat file_stat;
@@ -141,8 +131,9 @@ void fincore(char* path,
         */
         //sprintf( "%s", file_stat.st_size );
 
-        printf( "%-120s \n",
-                path
+        printf( "%-120s %15s\n",
+                path,
+                _ltoa( file_stat.st_size )
 
                 );
 
@@ -182,8 +173,6 @@ void help() {
  * see README
  */
 int main(int argc, char *argv[]) {
-
-    printf( "FIXME: %s\n", __itoa( 100 ) );
 
     if ( argc == 1 ) {
         help();
