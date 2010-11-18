@@ -153,7 +153,7 @@ char *foobar( int value ) {
 
 char *_ltoa( off_t value ) {
 
-    char buff[100];
+    static char buff[100];
 
     sprintf( buff, "%ld", value );
 
