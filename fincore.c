@@ -130,6 +130,8 @@ void fincore(char* path,
         */
         //sprintf( "%s", file_stat.st_size );
 
+        printf( "format string is: %s" , format );
+
         printf( "%-120s %15s %15s \n",
                 path,
                 _ltoa( file_stat.st_size ),
