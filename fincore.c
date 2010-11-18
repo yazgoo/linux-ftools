@@ -21,6 +21,8 @@ void fincore(char* path,
              struct fincore_result *result,
              char* format ) {
 
+    __itoa( 100 );
+
     int fd;
     struct stat file_stat;
     void *file_mmap;
@@ -182,8 +184,6 @@ void help() {
  */
 int main(int argc, char *argv[]) {
 
-    __itoa( 100 );
-        
     if ( argc == 1 ) {
         help();
         exit(1);
