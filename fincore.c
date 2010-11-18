@@ -193,7 +193,7 @@ int main(int argc, char *argv[]) {
 
     long total_cached_size = 0;
 
-    printf( "%-60s %15s %15s %15s %15s %15s\n", 
+    printf( "%-80s %15s %15s %15s %15s %15s\n", 
             "filename", "size", "total_pages", "cached_pages", "cached_size", "cached_perc" );
 
     for( ; fidx < argc; ++fidx ) {
