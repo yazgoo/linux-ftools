@@ -69,10 +69,6 @@ void fincore(char* path,
         perror( "can not open file" );
         fprintf( stderr, "%s: can not open file: %s\n", path, strerror(errno) );
 
-        //perror( sprintf( "%s: can not open file", path ) );
-
-        //fprintf( stderr, "%s version %s\n", "fincore", LINUX_FTOOLS_VERSION );
-
         return;
     }
 
@@ -109,8 +105,16 @@ void fincore(char* path,
     int cached = 0;
     int printed = 0;
 
-    int r0  = 0;
+    int r0 = 0;
     int r1 = 0;
+    int r2 = 0;
+    int r3 = 0;
+    int r4 = 0;
+    int r5 = 0;
+    int r6 = 0;
+    int r7 = 0;
+    int r8 = 0;
+    int r9 = 0;
 
     int ptr = total_pages / 2;
 
@@ -149,18 +153,6 @@ void fincore(char* path,
     long cached_size = (double)cached * (double)page_size;
 
     if ( only_cached == 0 || cached > 0 ) {
-
-        /*
-        printf( format, 
-                path, 
-                _ltoa( file_stat.st_size ), 
-                _itoa( total_pages ), 
-                _itoa( cached ),  
-                _itoa( cached_size ), 
-                _dtoa( cached_perc ),
-                _itoa( r0 ),
-                _itoa( r1 ) );
-        */
 
         printf( DATA_FORMAT, 
                 path, 
