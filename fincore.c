@@ -142,6 +142,9 @@ void fincore(char* path,
 
     }
 
+    printf ( "r0: %d", r0 );
+    printf ( "r50: %d", r50 );
+
     if ( printed ) printf("\n");
 
     // TODO: make all these variables long and print them as ld
