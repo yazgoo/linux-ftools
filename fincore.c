@@ -119,6 +119,7 @@ void fincore(char* path,
     //r0.nr_pages = 
 
     for (page_index = 0; page_index <= file_stat.st_size/page_size; page_index++) {
+
         if (mincore_vec[page_index]&1) {
             ++cached;
 
@@ -133,8 +134,10 @@ void fincore(char* path,
                 {
                 case 0:
                     ++r0;
+                    break;
                 case 1:
                     ++r50;
+                    break;
                 }
 
         }
