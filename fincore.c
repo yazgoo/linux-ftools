@@ -141,7 +141,7 @@ void fincore(char* path,
 
 }
 
-void foobar( int value ) {
+char *foobar( int value ) {
 
     static char buff[100];
 
