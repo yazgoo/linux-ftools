@@ -131,9 +131,10 @@ void fincore(char* path,
         */
         //sprintf( "%s", file_stat.st_size );
 
-        printf( "%-120s %15s\n",
+        printf( "%-120s %15s %15s \n",
                 path,
                 _ltoa( file_stat.st_size )
+                _itoa( total_pages ),  
 
                 );
 
