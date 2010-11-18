@@ -124,11 +124,6 @@ void fincore(char* path,
 
     if ( only_cached == 0 || cached > 0 ) {
 
-        /*
-        printf( "%s %ld %d %d %ld %f\n", 
-                path, file_stat.st_size, total_pages, cached, cached_size, cached_perc );
-        */
-
         printf( format, 
                 path, 
                 _ltoa( file_stat.st_size ), 
@@ -136,19 +131,6 @@ void fincore(char* path,
                 _itoa( cached ),  
                 _itoa( cached_size ), 
                 _dtoa( cached_perc ) );
-
-        //sprintf( "%s", file_stat.st_size );
-
-        //printf( "format string is: %s" , format );
-
-        /*
-        printf( "%-120s %15s %15s \n",
-                path,
-                _ltoa( file_stat.st_size ),
-                _itoa( total_pages )
-
-                );
-        */
 
     }
 
@@ -242,7 +224,7 @@ int main(int argc, char *argv[]) {
 
     long total_cached_size = 0;
 
-    char format[] = "%-120s %15s %15s %15s %15s %15s\n";
+    char format[] = "%-80s %15s %15s %15s %15s %15s\n";
 
     printf( format, 
             "filename", "size", "total_pages", "cached_pages", "cached_size", "cached_perc" );
