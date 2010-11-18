@@ -43,15 +43,18 @@ void fincore(char* path, int pages, int summarize, int only_cached, struct finco
     }
 
     if ( fstat( fd, &file_stat ) < 0 ) {
+
         perror( sprintf( "%s: Could not stat file", path ) );
-        return;
+
+        goto cleanup;
+
     }
 
     file_mmap = mmap((void *)0, file_stat.st_size, PROT_NONE, MAP_SHARED, fd, 0);
     
     if ( file_mmap == MAP_FAILED ) {
         perror( sprintf( "%s: Could not mmap file", path ) );
-        return;        
+        goto cleanup;      
     }
 
     mincore_vec = calloc(1, (file_stat.st_size+page_size-1)/page_size);
@@ -100,11 +103,18 @@ void fincore(char* path, int pages, int summarize, int only_cached, struct finco
 
     }
 
-    free(mincore_vec);
-    munmap(file_mmap, file_stat.st_size);
-    close(fd);
-
     result->cached_size = cached_size;
+
+ cleanup:
+
+    if ( mincore_vec != NULL )
+        free(mincore_vec);
+
+    if ( file_mmap != MAP_FAILED )
+        munmap(file_mmap, file_stat.st_size);
+
+    if ( fd != -1 )
+        close(fd);
 
     return;
 
@@ -117,9 +127,9 @@ void help() {
     fprintf( stderr, "fincore [options] files...\n" );
     fprintf( stderr, "\n" );
 
-    fprintf( stderr, "  --pages=false      Don't print pages\n" );
-    fprintf( stderr, "  --summarize        When comparing multiple files, print a summary report\n" );
-    fprintf( stderr, "  --only-cached      Only print stats for files that are actually in cache.\n" );
+    fprintf( stderr, "  --pages=true|false    Don't print pages\n" );
+    fprintf( stderr, "  --summarize           When comparing multiple files, print a summary report\n" );
+    fprintf( stderr, "  --only-cached         Only print stats for files that are actually in cache.\n" );
 
 }
 
@@ -146,14 +156,19 @@ int main(int argc, char *argv[]) {
 
     int i = 1; 
 
-    int pages         = 1;
-    int summarize     = 0;
+    int pages         = 0;
+    int summarize     = 1;
     int only_cached   = 0;
 
     for( ; i < argc; ++i ) {
 
         if ( strcmp( "--pages=false" , argv[i] ) == 0 ) {
             pages = 0;
+            ++fidx;
+        }
+
+        if ( strcmp( "--pages=true" , argv[i] ) == 0 ) {
+            pages = 1;
             ++fidx;
         }
 
