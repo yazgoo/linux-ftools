@@ -117,14 +117,14 @@ void fincore(char* path,
     // number of regions we should use.
     int nr_regions = 160;
 
-    *regions = (int*)calloc( nr_regions , sizeof(regions) ) ;
+    regions = (int*)calloc( nr_regions , sizeof(regions) ) ;
 
     if ( regions == NULL ) {
         perror( "Could not allocate memory" );
         goto cleanup;      
     }
 
-    *region_percs = calloc( nr_regions , sizeof(region_percs) ) ;
+    region_percs = calloc( nr_regions , sizeof(region_percs) ) ;
 
     if ( region_percs == NULL ) {
         perror( "Could not allocate memory" );
