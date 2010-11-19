@@ -12,6 +12,13 @@
 char STR_FORMAT[] =  "%-80s %15s %15s %15s %15s %15s %6s %6s %6s %6s %6s %6s %6s %6s %6s %6s\n";
 char DATA_FORMAT[] = "%-80s %15ld %15d %15d %15d %15f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f\n";
 
+// program options 
+int arg_pages         = 0; // display/print pages we've found.  Used for external programs.
+int arg_summarize     = 1; // print a summary at the end.
+int arg_only_cached   = 0; // only show cached files
+static int arg_graph         = 0; // graph the page distribution of files.
+
+
 struct fincore_result 
 {
     long cached_size;
@@ -286,12 +293,6 @@ void help() {
     fprintf( stderr, "  --only-cached         Only print stats for files that are actually in cache.\n" );
 
 }
-
-// program options 
-int arg_pages         = 0; // display/print pages we've found.  Used for external programs.
-int arg_summarize     = 1; // print a summary at the end.
-int arg_only_cached   = 0; // only show cached files
-static int arg_graph         = 0; // graph the page distribution of files.
 
 /**
  * see README
