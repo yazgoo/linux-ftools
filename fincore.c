@@ -12,7 +12,6 @@
 
 char STR_FORMAT[] =  "%-80s %18s %18s %18s %18s %18s\n";
 char DATA_FORMAT[] = "%-80s %'18ld %'18d %'18d %'18ld %18f\n";
-//char DATA_FORMAT[] = "%-80s %15ld %15d %15d %15ld %15f\n";
 
 // program options 
 int arg_pages         = 0;    // display/print pages we've found.  Used for external programs.
@@ -28,7 +27,9 @@ int NR_REGIONS        = 160;  // default number of regions
 // 
 // - ability to print graph width and height width
 //
+// - convert ALL the variables used to store stats to longs.
 //
+// - don't show graphs for files less than nr_regions
 
 struct fincore_result 
 {
@@ -255,7 +256,7 @@ void fincore(char* path,
             region_percs[i] = perc(regions[i], region_ptr );
         }
 
-        if ( arg_graph ) {
+        if ( arg_graph && file_stat.st_size > nr_regions ) {
             graph( region_percs, nr_regions );
         }
 
