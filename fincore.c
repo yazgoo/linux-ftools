@@ -184,12 +184,10 @@ void fincore(char* path,
         printf( "FIXME: r9 perc:     %f \n" , perc( regions[9], region_ptr ) );
         */
 
-        /*
         int i;
         for ( i = 0; i < 10; ++i ) {
             printf( "FIXME: region %d = %ld perc=%f\n" , i, regions[i], perc( regions[i], region_ptr ) );
         }
-        */
 
         printf( DATA_FORMAT, 
                 path, 
