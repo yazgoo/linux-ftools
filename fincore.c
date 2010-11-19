@@ -291,7 +291,7 @@ void help() {
 int arg_pages         = 0; // display/print pages we've found.  Used for external programs.
 int arg_summarize     = 1; // print a summary at the end.
 int arg_only_cached   = 0; // only show cached files
-int arg_graph         = 0; // graph the page distribution of files.
+static int arg_graph         = 0; // graph the page distribution of files.
 
 /**
  * see README
