@@ -117,12 +117,9 @@ void fincore(char* path,
 
     int regions[10];
 
-    //printf( "total_pages: %d", total_pages );
     fflush( stdout );
 
     int region_ptr = (int)(total_pages / (float)10);
-
-    //r0.nr_pages = 
 
     for (page_index = 0; page_index <= file_stat.st_size/page_size; page_index++) {
 
@@ -135,7 +132,8 @@ void fincore(char* path,
             }
 
             if ( region_ptr > 0 ) {
-                int region = (page_index / region_ptr ) - 1;
+
+                int region = (int)(page_index / region_ptr );
 
                 switch( region ) 
                     {
