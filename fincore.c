@@ -310,7 +310,7 @@ void show_headers() {
  */
 int main(int argc, char *argv[]) {
 
-    setlocale( LC_NUMERIC, "C" );
+    setlocale( LC_NUMERIC, "en_US" );
 
     int i = 1; 
 
