@@ -112,7 +112,7 @@ void fincore(char* path,
 
     if ( mincore(file_mmap, file_stat.st_size, mincore_vec) != 0 ) {
         char buff[1024];
-        sprintf( buff, "%s: Could not call mincore on file", path )
+        sprintf( buff, "%s: Could not call mincore on file", path );
         perror( buff );
         exit( 1 );
     }
