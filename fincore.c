@@ -65,6 +65,8 @@ double perc( long val, int range ) {
 
 void graph(double regions[], int nr_regions ) {
 
+    printf( "\n" );
+
     int *ptr;
 
     int i;
@@ -90,7 +92,9 @@ void graph(double regions[], int nr_regions ) {
         printf( "\n" );
 
     }
-    
+
+    printf( "\n" );
+
 }
 
 void fincore(char* path, 
