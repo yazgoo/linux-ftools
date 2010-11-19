@@ -136,10 +136,10 @@ void fincore(char* path,
     int i; 
 
     // Array of longs of the NR of blocks per region (used for graphing)
-    long *regions;
+    long *regions = NULL;
 
     // Array of doubles of the percentages of blocks per region.
-    double *region_percs;
+    double *region_percs = NULL;
 
     // number of regions we should use.
     int nr_regions = NR_REGIONS;
