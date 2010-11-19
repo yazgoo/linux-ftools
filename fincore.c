@@ -173,7 +173,7 @@ void fincore(char* path,
 
     double cached_perc = 100 * (cached / (double)total_pages); 
 
-    long cached_size = (double)cached * (double)page_size;
+    long cached_size = (long)cached * (long)page_size;
 
     if ( only_cached == 0 || cached > 0 ) {
 
