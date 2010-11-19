@@ -113,7 +113,7 @@ void fincore(char* path,
 
     int nr_regions = 160;
 
-    *regions = calloc( nr_regions , sizeof(regions) ) ;
+    *regions = (int*)calloc( nr_regions , sizeof(regions) ) ;
 
     if ( regions == NULL ) {
         perror( "Could not allocate memory" );
