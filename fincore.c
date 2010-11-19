@@ -9,19 +9,24 @@
 #include <math.h>
 #include <errno.h>
 
-//char STR_FORMAT[] =  "%-80s %15s %15s %15s %15s %15s %6s %6s %6s %6s %6s %6s %6s %6s %6s %6s\n";
-//char DATA_FORMAT[] = "%-80s %15ld %15d %15d %15d %15f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f\n";
-
 char STR_FORMAT[] =  "%-80s %15s %15s %15s %15s %15s\n";
 char DATA_FORMAT[] = "%-80s %15ld %15d %15d %15d %15f\n";
 
 // program options 
-int arg_pages         = 0; // display/print pages we've found.  Used for external programs.
-int arg_summarize     = 1; // print a summary at the end.
-int arg_only_cached   = 0; // only show cached files
-int arg_graph         = 0; // graph the page distribution of files.
+int arg_pages         = 0;    // display/print pages we've found.  Used for external programs.
+int arg_summarize     = 1;    // print a summary at the end.
+int arg_only_cached   = 0;    // only show cached files
+int arg_graph         = 0;    // graph the page distribution of files.
 
-int NR_REGIONS        = 160; // default number of regions
+int NR_REGIONS        = 160;  // default number of regions
+
+//TODO:
+//
+// - pretty print integers with commas... 
+// 
+// - ability to print graph width and height width
+//
+//
 
 struct fincore_result 
 {
@@ -141,9 +146,6 @@ void fincore(char* path,
         goto cleanup;      
     }
 
-    //TODO:
-    //
-    // pretty print integers with commas... 
     fd = open(path,O_RDWR);
 
     if ( fd == -1 ) {
@@ -229,8 +231,6 @@ void fincore(char* path,
 
     if ( printed ) printf("\n");
 
-    // TODO: make all these variables long and print them as ld
-
     double cached_perc = 100 * (cached / (double)total_pages); 
 
     long cached_size = (long)cached * (long)page_size;
@@ -273,7 +273,6 @@ void fincore(char* path,
     if ( fd != -1 )
         close(fd);
 
-    //FIXME: this is giving us an error trying to free this sometimes.
     if ( regions != NULL ) 
         free( regions );
 
@@ -294,6 +293,7 @@ void help() {
     fprintf( stderr, "  --pages=true|false    Don't print pages\n" );
     fprintf( stderr, "  --summarize           When comparing multiple files, print a summary report\n" );
     fprintf( stderr, "  --only-cached         Only print stats for files that are actually in cache.\n" );
+    fprintf( stderr, "  --graph               Print a visual graph of each file's cached page distribution.\n" );
 
 }
 
@@ -308,6 +308,8 @@ void show_headers() {
  * see README
  */
 int main(int argc, char *argv[]) {
+
+    setlocale( LC_NUMERIC, "C" );
 
     int i = 1; 
 
