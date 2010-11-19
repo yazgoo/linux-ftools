@@ -158,9 +158,11 @@ void fincore(char* path,
 
     long regions[nr_regions] ;
 
+    /*
     for( i = 0; i < nr_regions; ++i ) {
         regions[i] = 0;
     }
+    */
 
     //init this array ...
 
