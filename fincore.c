@@ -265,6 +265,13 @@ void help() {
 
 }
 
+void show_headers() {
+
+    printf( STR_FORMAT, "filename", "size", "total_pages", "cached_pages", "cached_size", "cached_perc" );
+    printf( STR_FORMAT, "--------", "----", "-----------", "------------", "-----------", "-----------" );
+
+}
+
 /**
  * see README
  */
@@ -320,8 +327,7 @@ int main(int argc, char *argv[]) {
 
     long total_cached_size = 0;
 
-    printf( STR_FORMAT, "filename", "size", "total_pages", "cached_pages", "cached_size", "cached_perc" );
-    printf( STR_FORMAT, "--------", "----", "-----------", "------------", "-----------", "-----------" );
+    show_headers();
 
     for( ; fidx < argc; ++fidx ) {
 
