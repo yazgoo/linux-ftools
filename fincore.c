@@ -285,6 +285,12 @@ void help() {
 
 }
 
+    // program options 
+    int pages         = 0; // display/print pages we've found.  Used for external programs.
+    int summarize     = 1; // print a summary at the end.
+    int only_cached   = 0; // only show cached files
+    int graph         = 0; // graph the page distribution of files.
+
 /**
  * see README
  */
@@ -299,12 +305,6 @@ int main(int argc, char *argv[]) {
     int fidx = 1;
 
     // parse command line options.
-
-    // program options 
-    int pages         = 0; // display/print pages we've found.  Used for external programs.
-    int summarize     = 1; // print a summary at the end.
-    int only_cached   = 0; // only show cached files
-    int graph         = 0; // graph the page distribution of files.
 
     int i = 1; 
 
