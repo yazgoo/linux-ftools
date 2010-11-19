@@ -155,7 +155,9 @@ void fincore(char* path,
 
     int nr_regions = 10;
 
-    long regions[nr_regions] = {[0 ... nr_regions] = 0};
+    static long regions[nr_regions] ;
+
+    //init this array ...
 
     regions[0]=0;
 
