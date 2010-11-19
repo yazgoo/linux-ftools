@@ -246,8 +246,6 @@ void fincore(char* path,
                 perc(regions[8], region_ptr ) ,
                 perc(regions[9], region_ptr ) );
 
-        double region_percs[10];
-        
         for( i = 0 ; i < nr_regions; ++i ) {
             region_percs[i] = perc(regions[i], region_ptr );
         }
