@@ -21,6 +21,9 @@ int arg_graph         = 0;    // graph the page distribution of files.
 
 int NR_REGIONS        = 160;  // default number of regions
 
+long arg_min_size          = -1;   // required minimum size for files or we ignore them.
+long arg_min_perc_cached   = -1;   // required minimum percent cached for files or we ignore them.
+
 //TODO:
 //
 // - pretty print integers with commas... 
@@ -79,7 +82,8 @@ void graph(double regions[], int nr_regions ) {
 
     int *ptr;
 
-    int i;
+    int i, j;
+
     for( i = 0 ; i < 10; ++ i ) {
 
         double perc_index = 100 - ((i+1) * 10 );
@@ -87,11 +91,13 @@ void graph(double regions[], int nr_regions ) {
         // show where we are.
         printf( "%4.0f %% ", perc_index + 10 );
 
-        int j;
-
         for( j = 0; j < nr_regions; ++j ) {
 
-            if ( regions[j] >= perc_index ) {
+            double val = regions[j];
+
+            if ( val < 1 ) {
+                printf( " " );
+            } else if ( val >= perc_index ) {
                 printf( "*" );
             } else {
                 printf( " " );
@@ -103,6 +109,12 @@ void graph(double regions[], int nr_regions ) {
 
     }
 
+    printf( "       " );
+    for( j = 0; j < nr_regions; ++j ) {
+        printf( "-" );
+    }
+
+    printf( "\n" );
     printf( "\n" );
 
 }
