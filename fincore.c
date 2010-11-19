@@ -48,7 +48,7 @@ double perc( long val, int range ) {
     if ( range == 0 )
         return 0;
 
-    double result = ( val / range ) * 100;
+    double result = ( val / (double)range ) * 100;
 
     return result;
 
