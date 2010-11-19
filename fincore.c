@@ -154,13 +154,13 @@ void fincore(char* path,
     int cached = 0;
     int printed = 0;
 
-    long regions[10] = {[0 ... 9] = 0};
+    int nr_regions = 10;
+
+    long regions[nr_regiosn] = {[0 ... 9] = 0};
 
     regions[0]=0;
 
     fflush( stdout );
-
-    int nr_regions = 10;
 
     int region_ptr = (int)((total_pages - 1) / nr_regions);
 
@@ -229,7 +229,9 @@ void fincore(char* path,
                 perc(regions[8], region_ptr ) ,
                 perc(regions[9], region_ptr ) );
 
-        art( regions, 10 );
+        int region_percs[nr_regions];
+        
+        art( regions, nr_regions );
 
     }
 
