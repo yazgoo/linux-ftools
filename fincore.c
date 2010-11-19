@@ -161,6 +161,7 @@ void fincore(char* path,
         printf( "FIXME: r9 perc:     %f \n" , perc( regions[9], region_ptr ) );
         */
 
+        /*
         printf( "FIXME: cached:      %d \n" , cached );
         printf( "FIXME: total_pages: %d \n" , total_pages );
         printf( "FIXME: region_ptr:  %d \n" , region_ptr );
@@ -169,6 +170,7 @@ void fincore(char* path,
         for ( i = 0; i < 10; ++i ) {
             printf( "FIXME: region %d = %ld perc=%f\n" , i, regions[i], perc( regions[i], region_ptr ) );
         }
+        */
 
         printf( DATA_FORMAT, 
                 path, 
