@@ -16,8 +16,7 @@ char DATA_FORMAT[] = "%-80s %15ld %15d %15d %15d %15f %6.2f %6.2f %6.2f %6.2f %6
 int arg_pages         = 0; // display/print pages we've found.  Used for external programs.
 int arg_summarize     = 1; // print a summary at the end.
 int arg_only_cached   = 0; // only show cached files
-static int arg_graph         = 0; // graph the page distribution of files.
-
+int arg_graph         = 0; // graph the page distribution of files.
 
 struct fincore_result 
 {
@@ -92,9 +91,6 @@ void graph(double regions[], int nr_regions ) {
 }
 
 void fincore(char* path, 
-             int pages, 
-             int summarize, 
-             int only_cached, 
              struct fincore_result *result ) {
 
     int fd;
@@ -187,7 +183,7 @@ void fincore(char* path,
         if (mincore_vec[page_index]&1) {
             ++cached;
 
-            if ( pages ) {
+            if ( arg_pages ) {
                 printf("%lu ", (unsigned long)page_index);
                 ++printed;
             }
@@ -358,7 +354,7 @@ int main(int argc, char *argv[]) {
 
         struct fincore_result result;
 
-        fincore( path, arg_pages, arg_summarize, arg_only_cached , &result );
+        fincore( path, &result );
 
         total_cached_size += result.cached_size;
 
