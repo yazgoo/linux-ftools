@@ -356,7 +356,7 @@ int main(int argc, char *argv[]) {
 
     }
     
-    if ( summarize ) {
+    if ( arg_summarize ) {
         
         printf( "---\n" );
 
