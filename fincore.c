@@ -360,6 +360,11 @@ int main(int argc, char *argv[]) {
             ++fidx;
         }
 
+        if ( strstr( "--min-size=" , argv[i] ) != NULL ) {
+            //arg_min_size = atoi( ;
+            ++fidx;
+        }
+
         if ( strcmp( "--graph" , argv[i] ) == 0 ) {
             arg_graph = 1;
             ++fidx;
