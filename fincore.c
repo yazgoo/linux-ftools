@@ -76,8 +76,9 @@ void fincore(char* path,
 
     if ( fd == -1 ) {
 
-        perror( "can not open file" );
-        fprintf( stderr, "%s: can not open file: %s\n", path, strerror(errno) );
+        char buff[1024];
+        sprintf( buff, "Could not open file: %s", path );
+        perror( buff );
 
         return;
     }
@@ -85,19 +86,19 @@ void fincore(char* path,
     if ( fstat( fd, &file_stat ) < 0 ) {
 
         char buff[1024];
-        sprintf( buff, "%s: Could not stat file", path );
+        sprintf( buff, "Could not stat file: %s", path );
         perror( buff );
 
         goto cleanup;
 
     }
 
-    file_mmap = mmap((void *)0, file_stat.st_size, PROT_NONE, MAP_SHARED, fd, 0);
+    file_mmap = mmap((void *)0, file_stat.st_size, PROT_NONE, MAP_SHARED, fd, 0 );
     
     if ( file_mmap == MAP_FAILED ) {
 
         char buff[1024];
-        sprintf( buff, "%s: Could not mmap file", path );
+        sprintf( buff, "Could not mmap file: %s", path );
         perror( buff );
         goto cleanup;      
     }
