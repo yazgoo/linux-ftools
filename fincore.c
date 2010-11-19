@@ -58,18 +58,17 @@ void art(double regions[], int nr_regions ) {
 
     int *ptr;
 
-    int array_len = nr_regions;
-
     int i;
     for( i = 0 ; i < 10; ++ i ) {
 
-        int perc_index = 100 - (i * 10 );
+        double perc_index = 100 - (i * 10 );
 
-        printf( "%4.2d %% ", perc_index );
+        // show where we are.
+        printf( "%4.0f %% ", perc_index );
 
         int j;
 
-        for( j = 0; j < array_len; ++j ) {
+        for( j = 0; j < nr_regions; ++j ) {
 
             if ( regions[j] >= perc_index ) {
                 printf( "*" );
