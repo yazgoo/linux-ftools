@@ -115,7 +115,7 @@ void fincore(char* path,
     int cached = 0;
     int printed = 0;
 
-    int[] regions = int[10];
+    int regions[] = int[10];
 
     //printf( "total_pages: %d", total_pages );
     fflush( stdout );
