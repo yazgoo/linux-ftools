@@ -43,13 +43,13 @@ char *_dtoa( double value ) {
 
 }
 
-double perc( int val, int range ) {
+double perc( long val, int range ) {
     
     if ( range == 0 )
         return 0;
 
-
     double result = ( val / range ) * 100;
+
     return result;
 
 }
@@ -183,6 +183,10 @@ void fincore(char* path,
         printf( "FIXME: region_ptr:  %d \n" , region_ptr );
         printf( "FIXME: r9 perc:     %f \n" , perc( regions[9], region_ptr ) );
         */
+
+        for ( int i = 0; i < 10; ++i ) {
+            printf( "FIXME: region %d = %ld \n" , i, regions[i] );
+        }
 
         printf( DATA_FORMAT, 
                 path, 
