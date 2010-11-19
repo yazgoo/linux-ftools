@@ -155,7 +155,7 @@ void fincore(char* path,
 
     int nr_regions = 10;
 
-    long regions[10] = {[0 ... 9] = 0};
+    long regions[nr_regions] = {[0 ... nr_regions] = 0};
 
     regions[0]=0;
 
