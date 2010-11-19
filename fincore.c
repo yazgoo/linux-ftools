@@ -96,6 +96,7 @@ void fincore(char* path,
     unsigned char *mincore_vec;
     size_t page_size = getpagesize();
     size_t page_index;
+    int i; 
 
     int flags = O_RDWR;
     
@@ -153,13 +154,15 @@ void fincore(char* path,
     int cached = 0;
     int printed = 0;
 
-    const int nr_regions = 10;
+    int nr_regions = 10;
 
-    static long regions[nr_regions] ;
+    long regions[nr_regions] ;
+
+    for( i = 0; i < nr_regions; ++i ) {
+        regions[i] = 0;
+    }
 
     //init this array ...
-
-    regions[0]=0;
 
     fflush( stdout );
 
@@ -232,7 +235,6 @@ void fincore(char* path,
 
         double region_percs[10];
         
-        int i; 
         for( i = 0 ; i < 10; ++i ) {
             region_percs[i] = perc(regions[i], region_ptr );
         }
