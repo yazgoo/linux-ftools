@@ -9,6 +9,7 @@
 #include <math.h>
 #include <errno.h>
 #include <locale.h>
+#include <sys/ioctl.h> 
 
 char STR_FORMAT[] =  "%-80s %18s %18s %18s %18s %18s\n";
 char DATA_FORMAT[] = "%-80s %'18ld %'18d %'18d %'18ld %18f\n";
@@ -33,6 +34,8 @@ long arg_min_perc_cached   = -1;   // required minimum percent cached for files 
 // - convert ALL the variables used to store stats to longs.
 //
 // - don't show graphs for files less than nr_regions
+//
+// - option to print symbols in human readable form (1GB, 2.1GB , 300KB
 
 struct fincore_result 
 {
@@ -143,6 +146,11 @@ void fincore(char* path,
 
     // number of regions we should use.
     int nr_regions = NR_REGIONS;
+
+    if (ioctl(0,TIOCGWINSZ,&ws) == 0) { 
+        fprintf(stderr,"TIOCGWINSZ:%s\n",strerror(errno)); 
+        nr_regions = ws.ws_col;
+    } 
 
     // by default the cached size is zero.
     result->cached_size = 0;
