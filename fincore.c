@@ -98,15 +98,14 @@ void fincore(char* path,
     size_t page_index;
     int i; 
 
-    int flags = O_RDWR;
-    
     //TODO:
     //
     // pretty print integers with commas... 
-    fd = open(path,flags);
+    fd = open(path,O_RDWR);
 
     if ( fd == -1 ) {
-
+        
+        //FIXME: migrate this code to a decated function for dealing with errors.
         char buff[1024];
         sprintf( buff, "Could not open file: %s", path );
         perror( buff );
@@ -156,7 +155,14 @@ void fincore(char* path,
 
     int nr_regions = 10;
 
-    long regions[10] ;
+    long *regions = calloc( nr_regions , sizeof(regions) ) ;
+
+    if ( regions == NULL ) {
+        char buff[1024];
+        sprintf( buff, "Could not allocate memory: %s", path );
+        perror( buff );
+        goto cleanup;      
+    }
 
     /*
     for( i = 0; i < nr_regions; ++i ) {
@@ -257,6 +263,9 @@ void fincore(char* path,
 
     if ( fd != -1 )
         close(fd);
+
+    if ( regions != NULL ) 
+        free( regions );
 
     return;
 
