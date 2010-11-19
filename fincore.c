@@ -21,6 +21,8 @@ int arg_summarize     = 1; // print a summary at the end.
 int arg_only_cached   = 0; // only show cached files
 int arg_graph         = 0; // graph the page distribution of files.
 
+int NR_REGIONS        = 160; // default number of regions
+
 struct fincore_result 
 {
     long cached_size;
@@ -120,7 +122,10 @@ void fincore(char* path,
     double *region_percs;
 
     // number of regions we should use.
-    int nr_regions = 160;
+    int nr_regions = NR_REGIONS;
+
+    // by default the cached size is zero.
+    result->cached_size = 0;
 
     regions = (int*)calloc( nr_regions , sizeof(regions) ) ;
 
