@@ -210,6 +210,10 @@ void fincore(char* path,
 
     if ( arg_only_cached == 0 || cached > 0 ) {
 
+        if ( arg_graph ) {
+            show_headers();
+        }
+
         printf( DATA_FORMAT, 
                 path, 
                 file_stat.st_size , 
