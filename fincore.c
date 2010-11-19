@@ -11,7 +11,8 @@
 #include <locale.h>
 
 char STR_FORMAT[] =  "%-80s %15s %15s %15s %15s %15s\n";
-char DATA_FORMAT[] = "%-80s %'15ld %'15d %'15d %'15d %15f\n";
+//char DATA_FORMAT[] = "%-80s %'15ld %'15d %'15d %'15d %15f\n";
+char DATA_FORMAT[] = "%-80s %15ld %15d %15d %15d %15f\n";
 
 // program options 
 int arg_pages         = 0;    // display/print pages we've found.  Used for external programs.
