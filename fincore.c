@@ -9,8 +9,8 @@
 #include <math.h>
 #include <errno.h>
 
-char STR_FORMAT[] =  "%-80s %15s %15s %15s %15s %15s %5s %5s %5s %5s %5s %5s %5s %5s %5s %5s\n";
-char DATA_FORMAT[] = "%-80s %15ld %15d %15d %15d %15f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f\n";
+char STR_FORMAT[] =  "%-80s %15s %15s %15s %15s %15s %6s %6s %6s %6s %6s %6s %6s %6s %6s %6s\n";
+char DATA_FORMAT[] = "%-80s %15ld %15d %15d %15d %15f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f\n";
 
 struct fincore_result 
 {
