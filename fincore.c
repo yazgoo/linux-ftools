@@ -123,7 +123,7 @@ void fincore(char* path,
 
     int nr_regions = 10;
 
-    int region_ptr = (int)(total_pages / nr_regions);
+    int region_ptr = (int)(total_pages - 1 / nr_regions);
 
     for (page_index = 0; page_index <= file_stat.st_size/page_size; page_index++) {
 
