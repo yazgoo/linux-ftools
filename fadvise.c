@@ -62,6 +62,8 @@ Access data only once.
 */
 int main(int argc, char *argv[]) {
 
+    setlocale( LC_NUMERIC, "en_US" );
+
     if ( argc < 3 ) {
         fprintf( stderr, "%s version %s\n", argv[0], LINUX_FTOOLS_VERSION );
         printf( "SYNTAX: fadvise filename mode [offset] [,length]\n" );
