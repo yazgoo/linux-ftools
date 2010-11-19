@@ -8,6 +8,7 @@
 #include <linux-ftools.h>
 #include <math.h>
 #include <errno.h>
+#include <locale.h>
 
 char STR_FORMAT[] =  "%-80s %15s %15s %15s %15s %15s\n";
 char DATA_FORMAT[] = "%-80s %15ld %15d %15d %15d %15f\n";
