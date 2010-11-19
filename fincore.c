@@ -153,7 +153,7 @@ void fincore(char* path,
     int cached = 0;
     int printed = 0;
 
-    int nr_regions = 10;
+    const int nr_regions = 10;
 
     static long regions[nr_regions] ;
 
