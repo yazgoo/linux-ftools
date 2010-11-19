@@ -115,17 +115,7 @@ void fincore(char* path,
     int cached = 0;
     int printed = 0;
 
-    //TODO: I could have made this an array with 10 positions.
-    int r0 = 0;
-    int r1 = 0;
-    int r2 = 0;
-    int r3 = 0;
-    int r4 = 0;
-    int r5 = 0;
-    int r6 = 0;
-    int r7 = 0;
-    int r8 = 0;
-    int r9 = 0;
+    int[] regions = int[10];
 
     //printf( "total_pages: %d", total_pages );
     fflush( stdout );
@@ -150,25 +140,25 @@ void fincore(char* path,
                 switch( region ) 
                     {
                     case 0:
-                        ++r0;
+                        ++regions[0];
                     case 1:
-                        ++r1;
+                        ++regions[1];
                     case 2:
-                        ++r2;
+                        ++regions[2];
                     case 3:
-                        ++r3;
+                        ++regions[3];
                     case 4:
-                        ++r4;
+                        ++regions[4];
                     case 5:
-                        ++r5;
+                        ++regions[5];
                     case 6:
-                        ++r6;
+                        ++regions[6];
                     case 7:
-                        ++r7;
+                        ++regions[7];
                     case 8:
-                        ++r8;
+                        ++regions[8];
                     case 9:
-                        ++r9;
+                        ++regions[9];
                     }
             }
         }
@@ -185,9 +175,9 @@ void fincore(char* path,
 
     if ( only_cached == 0 || cached > 0 ) {
 
-        printf( "FIXME: r9: %d \n" , r9 );
+        printf( "FIXME: r9: %d \n" , regions[9] );
         printf( "FIXME: region_ptr: %d \n" , region_ptr );
-        printf( "FIXME: r9 perc: %f \n" , perc( r9, region_ptr ) );
+        printf( "FIXME: r9 perc: %f \n" , perc( regions[9], region_ptr ) );
 
         printf( DATA_FORMAT, 
                 path, 
@@ -196,16 +186,16 @@ void fincore(char* path,
                 cached ,  
                 cached_size , 
                 cached_perc ,
-                r0,
-                r1 , 
-                r2 , 
-                r3 , 
-                r4 , 
-                r5 , 
-                r6 ,
-                r7 ,
-                r8 ,
-                perc(r9, region_ptr ) );
+                regions[0],
+                regions[1] , 
+                regions[2] , 
+                regions[3] , 
+                regions[4] , 
+                regions[5] , 
+                regions[6] ,
+                regions[7] ,
+                regions[8] ,
+                perc(regions[9], region_ptr ) );
 
     }
 
