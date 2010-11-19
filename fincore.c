@@ -84,7 +84,9 @@ void fincore(char* path,
 
     if ( fstat( fd, &file_stat ) < 0 ) {
 
-        perror( sprintf( "%s: Could not stat file", path ) );
+        char buff[1024];
+        sprintf( buff, "%s: Could not stat file", path );
+        perror( buff );
 
         goto cleanup;
 
@@ -93,7 +95,10 @@ void fincore(char* path,
     file_mmap = mmap((void *)0, file_stat.st_size, PROT_NONE, MAP_SHARED, fd, 0);
     
     if ( file_mmap == MAP_FAILED ) {
-        perror( sprintf( "%s: Could not mmap file", path ) );
+
+        char buff[1024];
+        sprintf( buff, "%s: Could not mmap file", path );
+        perror( buff );
         goto cleanup;      
     }
 
@@ -106,7 +111,9 @@ void fincore(char* path,
     }
 
     if ( mincore(file_mmap, file_stat.st_size, mincore_vec) != 0 ) {
-        perror( sprintf( "%s: Could not call mincore on file", path ) );
+        char buff[1024];
+        sprintf( buff, "%s: Could not call mincore on file", path )
+        perror( buff );
         exit( 1 );
     }
 
