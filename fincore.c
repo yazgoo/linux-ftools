@@ -10,8 +10,8 @@
 #include <errno.h>
 #include <locale.h>
 
-char STR_FORMAT[] =  "%-80s %15s %15s %15s %15s %15s\n";
-char DATA_FORMAT[] = "%-80s %'15ld %'15d %'15d %'15ld %15f\n";
+char STR_FORMAT[] =  "%-80s %18s %18s %18s %18s %18s\n";
+char DATA_FORMAT[] = "%-80s %'18ld %'18d %'18d %'18ld %18f\n";
 //char DATA_FORMAT[] = "%-80s %15ld %15d %15d %15ld %15f\n";
 
 // program options 
