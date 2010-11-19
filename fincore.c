@@ -54,7 +54,7 @@ double perc( long val, int range ) {
 
 }
 
-void art(double regions[], int nr_regions ) {
+void graph(double regions[], int nr_regions ) {
 
     int *ptr;
 
@@ -153,7 +153,7 @@ void fincore(char* path,
     int cached = 0;
     int printed = 0;
 
-    int nr_regions = 80;
+    int nr_regions = 100;
 
     long *regions = calloc( nr_regions , sizeof(regions) ) ;
 
@@ -250,7 +250,7 @@ void fincore(char* path,
             region_percs[i] = perc(regions[i], region_ptr );
         }
 
-        art( region_percs, nr_regions );
+        graph( region_percs, nr_regions );
 
     }
 
