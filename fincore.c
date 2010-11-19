@@ -256,7 +256,7 @@ void fincore(char* path,
             region_percs[i] = perc(regions[i], region_ptr );
         }
 
-        if ( arg_graph && file_stat.st_size > nr_regions ) {
+        if ( arg_graph && total_pages > nr_regions ) {
             graph( region_percs, nr_regions );
         }
 
