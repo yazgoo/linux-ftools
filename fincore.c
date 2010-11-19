@@ -159,7 +159,7 @@ void fincore(char* path,
     int cached = 0;
     int printed = 0;
 
-    int nr_regions = 152;
+    int nr_regions = 160;
 
     long *regions = calloc( nr_regions , sizeof(regions) ) ;
 
