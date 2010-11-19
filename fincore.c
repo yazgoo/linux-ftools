@@ -103,9 +103,14 @@ void fincore(char* path,
     int fd;
     struct stat file_stat;
     void *file_mmap;
+
+    // vector result from mincore
     unsigned char *mincore_vec;
+
+    // default page size of this OS
     size_t page_size = getpagesize();
     size_t page_index;
+
     int i; 
 
     // Array of longs of the NR of blocks per region (used for graphing)
@@ -154,6 +159,12 @@ void fincore(char* path,
 
         goto cleanup;
 
+    }
+
+    if ( file_stat.st_size == 0 ) {
+        // this file could not have been cached as it's empty so anything we
+        //would do is pointless.
+        goto cleanup;
     }
 
     file_mmap = mmap((void *)0, file_stat.st_size, PROT_NONE, MAP_SHARED, fd, 0 );
@@ -293,6 +304,8 @@ void show_headers() {
  */
 int main(int argc, char *argv[]) {
 
+    int i = 1; 
+
     if ( argc == 1 ) {
         help();
         exit(1);
@@ -302,8 +315,6 @@ int main(int argc, char *argv[]) {
     int fidx = 1;
 
     // parse command line options.
-
-    int i = 1; 
 
     for( ; i < argc; ++i ) {
 
