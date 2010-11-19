@@ -354,7 +354,8 @@ int main(int argc, char *argv[]) {
 
     long total_cached_size = 0;
 
-    show_headers();
+    if ( ! arg_graph ) 
+        show_headers();
 
     for( ; fidx < argc; ++fidx ) {
 
