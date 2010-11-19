@@ -285,11 +285,11 @@ void help() {
 
 }
 
-    // program options 
-    int pages         = 0; // display/print pages we've found.  Used for external programs.
-    int summarize     = 1; // print a summary at the end.
-    int only_cached   = 0; // only show cached files
-    int graph         = 0; // graph the page distribution of files.
+// program options 
+int arg_pages         = 0; // display/print pages we've found.  Used for external programs.
+int arg_summarize     = 1; // print a summary at the end.
+int arg_only_cached   = 0; // only show cached files
+int arg_graph         = 0; // graph the page distribution of files.
 
 /**
  * see README
@@ -311,22 +311,22 @@ int main(int argc, char *argv[]) {
     for( ; i < argc; ++i ) {
 
         if ( strcmp( "--pages=false" , argv[i] ) == 0 ) {
-            pages = 0;
+            arg_pages = 0;
             ++fidx;
         }
 
         if ( strcmp( "--pages=true" , argv[i] ) == 0 ) {
-            pages = 1;
+            arg_pages = 1;
             ++fidx;
         }
 
         if ( strcmp( "--summarize" , argv[i] ) == 0 ) {
-            summarize = 1;
+            arg_summarize = 1;
             ++fidx;
         }
 
         if ( strcmp( "--only-cached" , argv[i] ) == 0 ) {
-            only_cached = 1;
+            arg_only_cached = 1;
             ++fidx;
         }
 
@@ -350,7 +350,7 @@ int main(int argc, char *argv[]) {
 
         struct fincore_result result;
 
-        fincore( path, pages, summarize, only_cached , &result );
+        fincore( path, arg_pages, arg_summarize, arg_only_cached , &result );
 
         total_cached_size += result.cached_size;
 
