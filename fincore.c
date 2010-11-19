@@ -237,6 +237,8 @@ void fincore(char* path,
 
     long cached_size = (long)cached * (long)page_size;
 
+    printf( "FIXME: %ld\n", cached_size );
+
     if ( arg_only_cached == 0 || cached > 0 ) {
 
         if ( arg_graph ) {
