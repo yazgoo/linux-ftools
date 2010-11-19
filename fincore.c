@@ -108,6 +108,25 @@ void fincore(char* path,
     size_t page_index;
     int i; 
 
+    long *regions;
+    double *region_percs;
+
+    int nr_regions = 160;
+
+    *regions = calloc( nr_regions , sizeof(regions) ) ;
+
+    if ( regions == NULL ) {
+        perror( "Could not allocate memory" );
+        goto cleanup;      
+    }
+
+    *region_percs = calloc( nr_regions , sizeof(region_percs) ) ;
+
+    if ( region_percs == NULL ) {
+        perror( "Could not allocate memory" );
+        goto cleanup;      
+    }
+
     //TODO:
     //
     // pretty print integers with commas... 
@@ -162,22 +181,6 @@ void fincore(char* path,
 
     int cached = 0;
     int printed = 0;
-
-    int nr_regions = 160;
-
-    long *regions = calloc( nr_regions , sizeof(regions) ) ;
-
-    if ( regions == NULL ) {
-        perror( "Could not allocate memory" );
-        goto cleanup;      
-    }
-
-    double *region_percs = calloc( nr_regions , sizeof(region_percs) ) ;
-
-    if ( region_percs == NULL ) {
-        perror( "Could not allocate memory" );
-        goto cleanup;      
-    }
 
     //init this array ...
 
@@ -250,6 +253,7 @@ void fincore(char* path,
     if ( fd != -1 )
         close(fd);
 
+    //FIXME: this is giving us an error trying to free this sometimes.
     if ( regions != NULL ) 
         free( regions );
 
