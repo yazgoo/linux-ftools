@@ -117,9 +117,13 @@ void fincore(char* path,
 
     long regions[10];
 
+    regions[0]=0;
+
     fflush( stdout );
 
-    int region_ptr = (int)(total_pages / (float)10);
+    int nr_regions = 10;
+
+    int region_ptr = (int)(total_pages / nr_regions);
 
     for (page_index = 0; page_index <= file_stat.st_size/page_size; page_index++) {
 
@@ -173,9 +177,10 @@ void fincore(char* path,
 
     if ( only_cached == 0 || cached > 0 ) {
 
-        printf( "FIXME: r9: %d \n" , regions[9] );
-        printf( "FIXME: region_ptr: %d \n" , region_ptr );
-        printf( "FIXME: r9 perc: %f \n" , perc( regions[9], region_ptr ) );
+        printf( "FIXME: r9:          %d \n" , regions[9] );
+        printf( "FIXME: total_pages: %d \n" , total_pages );
+        printf( "FIXME: region_ptr:  %d \n" , region_ptr );
+        printf( "FIXME: r9 perc:     %f \n" , perc( regions[9], region_ptr ) );
 
         printf( DATA_FORMAT, 
                 path, 
