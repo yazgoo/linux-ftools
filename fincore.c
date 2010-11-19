@@ -11,8 +11,8 @@
 #include <locale.h>
 
 char STR_FORMAT[] =  "%-80s %15s %15s %15s %15s %15s\n";
-//char DATA_FORMAT[] = "%-80s %'15ld %'15d %'15d %'15d %15f\n";
-char DATA_FORMAT[] = "%-80s %15ld %15d %15d %15ld %15f\n";
+char DATA_FORMAT[] = "%-80s %'15ld %'15d %'15d %'15ld %15f\n";
+//char DATA_FORMAT[] = "%-80s %15ld %15d %15d %15ld %15f\n";
 
 // program options 
 int arg_pages         = 0;    // display/print pages we've found.  Used for external programs.
@@ -236,8 +236,6 @@ void fincore(char* path,
     double cached_perc = 100 * (cached / (double)total_pages); 
 
     long cached_size = (long)cached * (long)page_size;
-
-    printf( "FIXME: %ld\n", cached_size );
 
     if ( arg_only_cached == 0 || cached > 0 ) {
 
