@@ -9,8 +9,11 @@
 #include <math.h>
 #include <errno.h>
 
-char STR_FORMAT[] =  "%-80s %15s %15s %15s %15s %15s %6s %6s %6s %6s %6s %6s %6s %6s %6s %6s\n";
-char DATA_FORMAT[] = "%-80s %15ld %15d %15d %15d %15f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f\n";
+//char STR_FORMAT[] =  "%-80s %15s %15s %15s %15s %15s %6s %6s %6s %6s %6s %6s %6s %6s %6s %6s\n";
+//char DATA_FORMAT[] = "%-80s %15ld %15d %15d %15d %15f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f\n";
+
+char STR_FORMAT[] =  "%-80s %15s %15s %15s %15s %15s\n";
+char DATA_FORMAT[] = "%-80s %15ld %15d %15d %15d %15f\n";
 
 // program options 
 int arg_pages         = 0; // display/print pages we've found.  Used for external programs.
@@ -213,17 +216,7 @@ void fincore(char* path,
                 total_pages , 
                 cached ,  
                 cached_size , 
-                cached_perc ,
-                perc(regions[0], region_ptr ),
-                perc(regions[1], region_ptr ) , 
-                perc(regions[2], region_ptr ) , 
-                perc(regions[3], region_ptr ) , 
-                perc(regions[4], region_ptr ) , 
-                perc(regions[5], region_ptr ) , 
-                perc(regions[6], region_ptr ) ,
-                perc(regions[7], region_ptr ) ,
-                perc(regions[8], region_ptr ) ,
-                perc(regions[9], region_ptr ) );
+                cached_perc );
 
         for( i = 0 ; i < nr_regions; ++i ) {
             region_percs[i] = perc(regions[i], region_ptr );
@@ -327,8 +320,8 @@ int main(int argc, char *argv[]) {
 
     long total_cached_size = 0;
 
-    printf( STR_FORMAT, "filename", "size", "total_pages", "cached_pages", "cached_size", "cached_perc", "r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9" );
-    printf( STR_FORMAT, "--------", "----", "-----------", "------------", "-----------", "-----------", "--", "--" , "--", "--" , "--", "--" , "--", "--" , "--", "--" );
+    printf( STR_FORMAT, "filename", "size", "total_pages", "cached_pages", "cached_size", "cached_perc" );
+    printf( STR_FORMAT, "--------", "----", "-----------", "------------", "-----------", "-----------" );
 
     for( ; fidx < argc; ++fidx ) {
 
