@@ -139,29 +139,8 @@ void fincore(char* path,
 
                 int region = (int)(page_index / region_ptr );
 
-                switch( region ) 
-                    {
-                    case 0:
-                        ++regions[0];
-                    case 1:
-                        ++regions[1];
-                    case 2:
-                        ++regions[2];
-                    case 3:
-                        ++regions[3];
-                    case 4:
-                        ++regions[4];
-                    case 5:
-                        ++regions[5];
-                    case 6:
-                        ++regions[6];
-                    case 7:
-                        ++regions[7];
-                    case 8:
-                        ++regions[8];
-                    case 9:
-                        ++regions[9];
-                    }
+                ++regions[region];
+
             }
         }
 
