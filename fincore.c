@@ -244,7 +244,9 @@ void fincore(char* path,
             region_percs[i] = perc(regions[i], region_ptr );
         }
 
-        graph( region_percs, nr_regions );
+        if ( arg_graph ) {
+            graph( region_percs, nr_regions );
+        }
 
     }
 
@@ -327,6 +329,11 @@ int main(int argc, char *argv[]) {
 
         if ( strcmp( "--only-cached" , argv[i] ) == 0 ) {
             arg_only_cached = 1;
+            ++fidx;
+        }
+
+        if ( strcmp( "--graph" , argv[i] ) == 0 ) {
+            arg_graph = 1;
             ++fidx;
         }
 
