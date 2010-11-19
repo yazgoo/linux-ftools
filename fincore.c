@@ -158,9 +158,14 @@ void fincore(char* path,
     long *regions = calloc( nr_regions , sizeof(regions) ) ;
 
     if ( regions == NULL ) {
-        char buff[1024];
-        sprintf( buff, "Could not allocate memory: %s", path );
-        perror( buff );
+        perror( "Could not allocate memory" );
+        goto cleanup;      
+    }
+
+    double *region_percs = calloc( nr_regions , sizeof(region_percs) ) ;
+
+    if ( region_percs == NULL ) {
+        perror( "Could not allocate memory" );
         goto cleanup;      
     }
 
@@ -243,7 +248,7 @@ void fincore(char* path,
 
         double region_percs[10];
         
-        for( i = 0 ; i < 10; ++i ) {
+        for( i = 0 ; i < nr_regions; ++i ) {
             region_percs[i] = perc(regions[i], region_ptr );
         }
 
@@ -251,6 +256,7 @@ void fincore(char* path,
 
     }
 
+    // update structure members when done.
     result->cached_size = cached_size;
 
  cleanup:
@@ -266,6 +272,9 @@ void fincore(char* path,
 
     if ( regions != NULL ) 
         free( regions );
+
+    if ( region_percs != NULL ) 
+        free( region_percs );
 
     return;
 
