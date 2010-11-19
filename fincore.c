@@ -54,6 +54,37 @@ double perc( long val, int range ) {
 
 }
 
+void art(int regions[], int nr_regions ) {
+
+    int *ptr;
+
+    int array_len = nr_regions;
+
+    int i;
+    for( i = 0 ; i < 10; ++ i ) {
+
+        int perc_index = 100 - (i * 10 );
+
+        printf( "%4.2d %% ", perc_index );
+
+        int j;
+
+        for( j = 0; j < array_len; ++j ) {
+
+            if ( regions[j] >= perc_index ) {
+                printf( "*" );
+            } else {
+                printf( " " );
+            }
+
+        }
+        
+        printf( "\n" );
+
+    }
+    
+}
+
 void fincore(char* path, 
              int pages, 
              int summarize, 
@@ -197,6 +228,8 @@ void fincore(char* path,
                 perc(regions[7], region_ptr ) ,
                 perc(regions[8], region_ptr ) ,
                 perc(regions[9], region_ptr ) );
+
+        art( regions, 10 );
 
     }
 
