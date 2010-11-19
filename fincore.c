@@ -54,7 +54,7 @@ double perc( long val, int range ) {
 
 }
 
-void art(int regions[], int nr_regions ) {
+void art(double regions[], int nr_regions ) {
 
     int *ptr;
 
@@ -229,9 +229,14 @@ void fincore(char* path,
                 perc(regions[8], region_ptr ) ,
                 perc(regions[9], region_ptr ) );
 
-        int region_percs[nr_regions];
+        double region_percs[10];
         
-        art( regions, nr_regions );
+        int i; 
+        for( i = 0 ; i < 10; ++i ) {
+            region_percs[i] = perc(regions[i], region_ptr );
+        }
+
+        art( region_percs, nr_regions );
 
     }
 
