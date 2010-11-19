@@ -312,26 +312,28 @@ int main(int argc, char *argv[]) {
 
         if ( strcmp( "--pages=false" , argv[i] ) == 0 ) {
             pages = 0;
+            ++fidx;
         }
 
         if ( strcmp( "--pages=true" , argv[i] ) == 0 ) {
             pages = 1;
+            ++fidx;
         }
 
         if ( strcmp( "--summarize" , argv[i] ) == 0 ) {
             summarize = 1;
+            ++fidx;
         }
 
         if ( strcmp( "--only-cached" , argv[i] ) == 0 ) {
             only_cached = 1;
+            ++fidx;
         }
 
         if ( strcmp( "--help" , argv[i] ) == 0 ) {
             help();
             exit(1);
         }
-
-        ++fidx;
 
         //TODO what if this starts -- but we don't know what option it is?
 
