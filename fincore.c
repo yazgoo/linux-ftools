@@ -115,7 +115,7 @@ void fincore(char* path,
     int cached = 0;
     int printed = 0;
 
-    long regions[10];
+    long regions[10] = {[0...9]=0};
 
     regions[0]=0;
 
