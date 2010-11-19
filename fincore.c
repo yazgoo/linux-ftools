@@ -12,12 +12,6 @@
 char STR_FORMAT[] =  "%-80s %15s %15s %15s %15s %15s %6s %6s %6s %6s %6s %6s %6s %6s %6s %6s\n";
 char DATA_FORMAT[] = "%-80s %15ld %15d %15d %15d %15f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f\n";
 
-// program options 
-int pages         = 0; // display/print pages we've found.  Used for external programs.
-int summarize     = 1; // print a summary at the end.
-int only_cached   = 0; // only show cached files
-int graph         = 0; // graph the page distribution of files.
-
 struct fincore_result 
 {
     long cached_size;
@@ -306,11 +300,11 @@ int main(int argc, char *argv[]) {
 
     // parse command line options.
 
-    //TODO options:
-    //
-    // --pages=true|false print/don't print pages
-    // --summarize when comparing multiple files, print a summary report
-    // --only-cached only print stats for files that are actually in cache.
+    // program options 
+    int pages         = 0; // display/print pages we've found.  Used for external programs.
+    int summarize     = 1; // print a summary at the end.
+    int only_cached   = 0; // only show cached files
+    int graph         = 0; // graph the page distribution of files.
 
     int i = 1; 
 
