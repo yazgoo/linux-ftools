@@ -61,10 +61,10 @@ void art(double regions[], int nr_regions ) {
     int i;
     for( i = 0 ; i < 10; ++ i ) {
 
-        double perc_index = 100 - (i * 10 );
+        double perc_index = 100 - ((i+1) * 10 );
 
         // show where we are.
-        printf( "%4.0f %% ", perc_index );
+        printf( "%4.0f %% ", perc_index + 10 );
 
         int j;
 
