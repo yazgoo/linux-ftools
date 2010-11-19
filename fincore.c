@@ -12,6 +12,12 @@
 char STR_FORMAT[] =  "%-80s %15s %15s %15s %15s %15s %6s %6s %6s %6s %6s %6s %6s %6s %6s %6s\n";
 char DATA_FORMAT[] = "%-80s %15ld %15d %15d %15d %15f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f %6.2f\n";
 
+// program options 
+int pages         = 0; // display/print pages we've found.  Used for external programs.
+int summarize     = 1; // print a summary at the end.
+int only_cached   = 0; // only show cached files
+int graph         = 0; // graph the page distribution of files.
+
 struct fincore_result 
 {
     long cached_size;
@@ -169,12 +175,6 @@ void fincore(char* path,
         goto cleanup;      
     }
 
-    /*
-    for( i = 0; i < nr_regions; ++i ) {
-        regions[i] = 0;
-    }
-    */
-
     //init this array ...
 
     fflush( stdout );
@@ -314,36 +314,30 @@ int main(int argc, char *argv[]) {
 
     int i = 1; 
 
-    int pages         = 0;
-    int summarize     = 1;
-    int only_cached   = 0;
-
     for( ; i < argc; ++i ) {
 
         if ( strcmp( "--pages=false" , argv[i] ) == 0 ) {
             pages = 0;
-            ++fidx;
         }
 
         if ( strcmp( "--pages=true" , argv[i] ) == 0 ) {
             pages = 1;
-            ++fidx;
         }
 
         if ( strcmp( "--summarize" , argv[i] ) == 0 ) {
             summarize = 1;
-            ++fidx;
         }
 
         if ( strcmp( "--only-cached" , argv[i] ) == 0 ) {
             only_cached = 1;
-            ++fidx;
         }
 
         if ( strcmp( "--help" , argv[i] ) == 0 ) {
             help();
             exit(1);
         }
+
+        ++fidx;
 
         //TODO what if this starts -- but we don't know what option it is?
 
