@@ -15,15 +15,23 @@ char STR_FORMAT[] =  "%-80s %18s %18s %18s %18s %18s\n";
 char DATA_FORMAT[] = "%-80s %'18ld %'18d %'18d %'18ld %18f\n";
 
 // program options 
-int arg_pages         = 0;    // display/print pages we've found.  Used for external programs.
-int arg_summarize     = 1;    // print a summary at the end.
-int arg_only_cached   = 0;    // only show cached files
-int arg_graph         = 0;    // graph the page distribution of files.
+int arg_pages                 = 0;    // display/print pages we've found.  Used for external programs.
+int arg_summarize             = 1;    // print a summary at the end.
+int arg_only_cached           = 0;    // only show cached files
+int arg_graph                 = 0;    // graph the page distribution of files.
 
-int NR_REGIONS        = 160;  // default number of regions
+long DEFAULT_NR_REGIONS       = 160;  // default number of regions
 
-long arg_min_size          = -1;   // required minimum size for files or we ignore them.
-long arg_min_perc_cached   = -1;   // required minimum percent cached for files or we ignore them.
+long arg_min_size             = -1;   // required minimum size for files or we ignore them.
+long arg_min_perc_cached      = -1;   // required minimum percent cached for files or we ignore them.
+
+long nr_regions               = 0;
+
+// Array of longs of the NR of blocks per region (used for graphing)
+static long *regions          = NULL;
+
+// Array of doubles of the percentages of blocks per region.
+static double *region_percs   = NULL;
 
 //TODO:
 //
@@ -33,9 +41,12 @@ long arg_min_perc_cached   = -1;   // required minimum percent cached for files 
 //
 // - convert ALL the variables used to store stats to longs.
 //
-// - don't show graphs for files less than nr_regions
-//
 // - option to print symbols in human readable form (1GB, 2.1GB , 300KB
+//
+// - we trip a bug with free(regions) but only when it's not 106... what is this
+//   about?   This prevents custom graph widths.
+//
+// - only call setlocale() if it's not currently set.
 
 struct fincore_result 
 {
@@ -79,20 +90,37 @@ double perc( long val, int range ) {
 
 }
 
-void graph(double regions[], int nr_regions ) {
+void graph_header( long nr_regions ) {
+
+    int j;
+
+    printf( " ------" );
+    for( j = 0; j < nr_regions; ++j ) {
+        printf( "-" );
+    }
 
     printf( "\n" );
+
+}
+
+void graph(double regions[], long nr_regions ) {
+
+    printf( "\n" );
+
+    graph_header(nr_regions);
 
     int *ptr;
 
     int i, j;
+    
+    int perc_width = 10;
 
-    for( i = 0 ; i < 10; ++ i ) {
+    for( i = 0 ; i < perc_width; ++ i ) {
 
-        double perc_index = 100 - ((i+1) * 10 );
+        double perc_index = 100 - ((i+1) * perc_width );
 
         // show where we are.
-        printf( "%4.0f %% ", perc_index + 10 );
+        printf( "%4.0f %% ", perc_index + perc_width );
 
         for( j = 0; j < nr_regions; ++j ) {
 
@@ -108,16 +136,12 @@ void graph(double regions[], int nr_regions ) {
 
         }
         
-        printf( "\n" );
+        printf( " | \n" );
 
     }
 
-    printf( "       " );
-    for( j = 0; j < nr_regions; ++j ) {
-        printf( "-" );
-    }
+    graph_header(nr_regions);
 
-    printf( "\n" );
     printf( "\n" );
 
 }
@@ -138,38 +162,34 @@ void fincore(char* path,
 
     int i; 
 
-    // Array of longs of the NR of blocks per region (used for graphing)
-    long *regions = NULL;
+    // the number of pages that we have detected that are cached 
+    // FIXME: should be a long
+    unsigned int cached = 0;
+    // the number of pages that we have printed 
+    // FIXME: should be a long
+    unsigned int printed = 0;
 
-    // Array of doubles of the percentages of blocks per region.
-    double *region_percs = NULL;
-
-    // number of regions we should use.
-    int nr_regions = NR_REGIONS;
-
-    if (ioctl(0,TIOCGWINSZ,&ws) == 0) { 
-        fprintf(stderr,"TIOCGWINSZ:%s\n",strerror(errno)); 
-        nr_regions = ws.ws_col;
-    } 
-
-    // by default the cached size is zero.
+    // by default the cached size is zero so initialize this member.
     result->cached_size = 0;
 
-    regions = (int*)calloc( nr_regions , sizeof(regions) ) ;
+    //FIXME: make this sizeof(regions)
+    if ( regions == NULL )
+        regions = calloc( nr_regions , sizeof(long) ) ;
 
-    if ( regions == NULL ) {
+    if ( region_percs == NULL )
+        region_percs = calloc( nr_regions , sizeof(double) ) ;
+
+    if ( regions == NULL || region_percs == NULL ) {
         perror( "Could not allocate memory" );
         goto cleanup;      
     }
 
-    region_percs = calloc( nr_regions , sizeof(region_percs) ) ;
-
-    if ( region_percs == NULL ) {
-        perror( "Could not allocate memory" );
-        goto cleanup;      
+    for( i = 0; i < nr_regions; ++i ) {
+        regions[i] = (long)0;
+        region_percs[i] = (double)0;
     }
 
-    fd = open(path,O_RDWR);
+    fd = open( path, O_RDONLY );
 
     if ( fd == -1 ) {
         
@@ -211,6 +231,7 @@ void fincore(char* path,
 
     if ( mincore_vec == NULL ) {
         //something is really wrong here.  Just exit.
+        //FIXME: print the file we're running from.
         perror( "Could not calloc" );
         exit( 1 );
     }
@@ -223,9 +244,6 @@ void fincore(char* path,
     }
 
     int total_pages = (int)ceil( (double)file_stat.st_size / (double)page_size );
-
-    int cached = 0;
-    int printed = 0;
 
     //init this array ...
 
@@ -296,12 +314,6 @@ void fincore(char* path,
     if ( fd != -1 )
         close(fd);
 
-    if ( regions != NULL ) 
-        free( regions );
-
-    if ( region_percs != NULL ) 
-        free( region_percs );
-
     return;
 
 }
@@ -334,6 +346,20 @@ int main(int argc, char *argv[]) {
 
     setlocale( LC_NUMERIC, "en_US" );
 
+    nr_regions = DEFAULT_NR_REGIONS;
+
+    struct winsize ws; 
+
+    if (ioctl(stdout,TIOCGWINSZ,&ws) == 0) { 
+        
+        if ( ws.ws_col > nr_regions ) {
+            nr_regions = ((ws.ws_col/2)*2) - 10;
+        }
+
+        //printf( "Using graph width: %d\n" , nr_regions );
+
+    } 
+
     int i = 1; 
 
     if ( argc == 1 ) {
@@ -344,7 +370,7 @@ int main(int argc, char *argv[]) {
     //keep track of the file index.
     int fidx = 1;
 
-    // parse command line options.
+    // parse command line options (TODO: move to GNU getopt)
 
     for( ; i < argc; ++i ) {
 
@@ -387,10 +413,12 @@ int main(int argc, char *argv[]) {
 
     }
 
-    long total_cached_size = 0;
-
     if ( ! arg_graph ) 
         show_headers();
+
+    long total_cached_size = 0;
+
+    //TODO: mean cached percentage
 
     for( ; fidx < argc; ++fidx ) {
 
