@@ -28,7 +28,7 @@ int arg_verbose               = 0;    // level of verbosity.
 
 long arg_min_size             = -1;   // required minimum size for files or we ignore them.
 long arg_min_cached_size      = -1;   // required minimum percent cached for files or we ignore them.
-long arg_min_perc_cached      = -1;   // required minimum percent of a file in cache.
+long arg_min_cached_perc      = -1;   // required minimum percent of a file in cache.
 
 long nr_regions               = 0;
 
@@ -315,14 +315,18 @@ void fincore(char* path,
 
     long cached_size = (long)cached * (long)page_size;
 
-    if ( arg_min_cached_size > 0 && cached_size < arg_min_cached_size ) {
+    if ( arg_min_cached_size > 0 && cached_size <= arg_min_cached_size ) {
+        goto cleanup;
+    }
+
+    if ( arg_min_cached_perc > 0 && cached_perc <= arg_min_cached_perc ) {
         goto cleanup;
     }
 
     if ( arg_only_cached == 0 || cached > 0 ) {
 
         if ( arg_graph ) {
-            show_headers();
+            _show_headers();
         }
 
         printf( DATA_FORMAT, 
@@ -379,7 +383,7 @@ void help() {
 
 }
 
-void show_headers() {
+void _show_headers() {
 
     printf( STR_FORMAT, "filename", "size", "total_pages", "cached_pages", "cached_size", "cached_perc" );
     printf( STR_FORMAT, "--------", "----", "-----------", "------------", "-----------", "-----------" );
@@ -406,7 +410,7 @@ int main(int argc, char *argv[]) {
             {"verbose",           optional_argument,       0, 'v'},
             {"min-size",          required_argument,       0, 'S'},
             {"min-cached-size",   required_argument,       0, 'C'},
-            {"min-perc-cached",   required_argument,       0, 'P'},
+            {"min-cached-perc",   required_argument,       0, 'P'},
             {"help",              no_argument,             0, 'h'},
             {0, 0, 0, 0}
         };
@@ -460,7 +464,7 @@ int main(int argc, char *argv[]) {
                 break;
 
             case 'P':
-                arg_min_perc_cached = _argtoint( optarg, 0 );
+                arg_min_cached_perc = _argtoint( optarg, 0 );
                 break;
 
             case 'h':
@@ -489,7 +493,7 @@ int main(int argc, char *argv[]) {
        printf( "    graph:            %d\n",  arg_graph );
        printf( "    min size:         %ld\n", arg_min_size );
        printf( "    min cached size:  %ld\n", arg_min_cached_size );
-       printf( "    min perc cached:  %ld\n", arg_min_perc_cached );
+       printf( "    min cached perc:  %ld\n", arg_min_cached_perc );
 
    }
 
@@ -509,14 +513,13 @@ int main(int argc, char *argv[]) {
 
     } 
 
-
     if ( optind == argc ) {
         help();
         exit(1);
     }
 
     if ( ! arg_graph ) 
-        show_headers();
+        _show_headers();
 
     long total_cached_size = 0;
     

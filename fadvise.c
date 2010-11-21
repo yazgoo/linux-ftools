@@ -12,6 +12,17 @@
 #include <string.h>
 #include <linux-ftools.h>
 
+//convert the given string to uppercase.
+void strtoupper( char* str ) {
+
+    int i;
+
+    for( i = 0; i < strlen( str ); ++i ) {
+        str[i] = toupper( str[i] );
+    }
+
+}
+
 /** 
 
 SYNTAX: filename mode [offset] [,length]
@@ -68,20 +79,34 @@ int main(int argc, char *argv[]) {
 
         printf( "Where mode can be:\n\n" );
 
-        printf( "  POSIX_FADV_NORMAL       No further special treatment.  \n" );
-        printf( "  POSIX_FADV_RANDOM       Expect random page references.  \n" );
-        printf( "  POSIX_FADV_SEQUENTIAL   Expect sequential page references.  \n" );
-        printf( "  POSIX_FADV_WILLNEED     Will need these pages.  \n" );
-        printf( "  POSIX_FADV_DONTNEED     Don't need these pages.  \n" );
-        printf( "  POSIX_FADV_NOREUSE      Data will be accessed once.  \n" );
+        printf( "  POSIX_FADV_NORMAL      | NORMAL      No further special treatment.  \n" );
+        printf( "  POSIX_FADV_RANDOM      | RANDOM      Expect random page references.  \n" );
+        printf( "  POSIX_FADV_SEQUENTIAL  | SEQUENTIAL  Expect sequential page references.  \n" );
+        printf( "  POSIX_FADV_WILLNEED    | WILLNEED    Will need these pages.  \n" );
+        printf( "  POSIX_FADV_DONTNEED    | DONTNEED    Don't need these pages.  \n" );
+        printf( "  POSIX_FADV_NOREUSE     | NOREUSE     Data will be accessed once.  \n" );
 
         exit( 1 );
     }
 
     char* path = argv[1];
     char* param_mode = argv[2];
+    
+    strtoupper( param_mode );
 
-    printf( "Going to fadvise %s\n", path );
+    if ( strcmp( param_mode, "DO_NOT_WANT" ) == 0 ) {
+        param_mode = "POSIX_FADV_DONTNEED";
+    }
+
+    char new_mode[40];
+
+    if ( strstr( "POSIX_FADV_" , param_mode ) != 0 ) {
+        strcat( new_mode, "POSIX_FADV_" );
+        strcat( new_mode, param_mode );
+        param_mode = new_mode;
+    }
+
+    printf( "Going to fadvise %s as mode %s\n", path , param_mode );
 
     int flags = O_RDWR;
     int fd = open( path, flags );
