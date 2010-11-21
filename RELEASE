@@ -18,3 +18,4 @@ apt-get install autoconf automake fakeroot debhelper
 
 fakeroot debian/rules clean
 fakeroot debian/rules binary
+    
