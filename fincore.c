@@ -15,7 +15,7 @@
 #include <sys/ioctl.h> 
 
 char STR_FORMAT[] =  "%-80s %18s %18s %18s %18s %18s\n";
-char DATA_FORMAT[] = "%-80s %'18ld %'18d %'18d %'18ld %18f\n";
+char DATA_FORMAT[] = "%-80s %'18ld %'18d %'18d %'18ld %18.2f\n";
 
 long DEFAULT_NR_REGIONS       = 160;  // default number of regions
 
