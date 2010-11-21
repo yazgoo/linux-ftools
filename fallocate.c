@@ -58,14 +58,14 @@ int main(int argc, char *argv[]) {
     int fd = open( path, flags );
 
     if ( fd == -1 ) {
-        perror( NULL );
+        perror( "Unable to open file" );
         return 1;
     }
 
     struct stat fd_stat ;
 
     if ( fstat( fd, &fd_stat )  < 0 ) {
-        perror( "Could not stat file: " );
+        perror( "Could not stat file" );
         return 1;
     }
 
@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
     printf( "Current block size: %ld\n", fd_stat.st_blksize );
     printf( "Current blocks allocated: %ld\n" , fd_stat.st_blocks );
 
-    long increase = strtol( argv[2], NULL, 10 );
+    size_t increase = atol( argv[2] );
 
     printf( "Increasing file to: %ld\n", increase );
 
