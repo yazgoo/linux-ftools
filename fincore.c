@@ -1,3 +1,6 @@
+
+#include <ctype.h>
+#include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -14,16 +17,18 @@
 char STR_FORMAT[] =  "%-80s %18s %18s %18s %18s %18s\n";
 char DATA_FORMAT[] = "%-80s %'18ld %'18d %'18d %'18ld %18f\n";
 
+long DEFAULT_NR_REGIONS       = 160;  // default number of regions
+
 // program options 
 int arg_pages                 = 0;    // display/print pages we've found.  Used for external programs.
 int arg_summarize             = 1;    // print a summary at the end.
 int arg_only_cached           = 0;    // only show cached files
 int arg_graph                 = 0;    // graph the page distribution of files.
-
-long DEFAULT_NR_REGIONS       = 160;  // default number of regions
+int arg_verbose               = 0;    // level of verbosity.
 
 long arg_min_size             = -1;   // required minimum size for files or we ignore them.
-long arg_min_perc_cached      = -1;   // required minimum percent cached for files or we ignore them.
+long arg_min_cached_size      = -1;   // required minimum percent cached for files or we ignore them.
+long arg_min_perc_cached      = -1;   // required minimum percent of a file in cache.
 
 long nr_regions               = 0;
 
@@ -47,11 +52,45 @@ static double *region_percs   = NULL;
 //   about?   This prevents custom graph widths.
 //
 // - only call setlocale() if it's not currently set.
+// 
+// - print new headers every N rows.
 
 struct fincore_result 
 {
     long cached_size;
 };
+
+int _argtobool( char* str ) {
+
+    int result = 0;
+
+    if ( optarg != NULL ) {
+
+        if ( strcmp( "true", optarg ) == 0 ) {
+            result = 1;
+        } 
+
+        if ( strcmp( "1", optarg ) == 0 ) {
+            result = 1;
+        } 
+
+    } else {
+        result = 1;
+    }
+
+    return result;
+}
+
+int _argtoint( char* str, int _default ) {
+
+    int result = _default;
+
+    if ( optarg != NULL ) {
+        result = atoi( str );
+    } 
+
+    return result;
+}
 
 char *_itoa(int n) {
 	static char retbuf[100];
@@ -276,6 +315,10 @@ void fincore(char* path,
 
     long cached_size = (long)cached * (long)page_size;
 
+    if ( arg_min_cached_size > 0 && cached_size < arg_min_cached_size ) {
+        goto cleanup;
+    }
+
     if ( arg_only_cached == 0 || cached > 0 ) {
 
         if ( arg_graph ) {
@@ -325,10 +368,14 @@ void help() {
     fprintf( stderr, "fincore [options] files...\n" );
     fprintf( stderr, "\n" );
 
-    fprintf( stderr, "  --pages=true|false    Don't print pages\n" );
-    fprintf( stderr, "  --summarize           When comparing multiple files, print a summary report\n" );
-    fprintf( stderr, "  --only-cached         Only print stats for files that are actually in cache.\n" );
-    fprintf( stderr, "  --graph               Print a visual graph of each file's cached page distribution.\n" );
+    fprintf( stderr, "  -s --summarize          When comparing multiple files, print a summary report\n" );
+    fprintf( stderr, "  -p --pages              Print pages that are cached\n" );
+    fprintf( stderr, "  -o --only-cached        Only print stats for files that are actually in cache.\n" );
+    fprintf( stderr, "  -g --graph              Print a visual graph of each file's cached page distribution.\n" );
+    fprintf( stderr, "  -S --min-size           Require that each files size be larger than N bytes.\n" );
+    fprintf( stderr, "  -C --min-cached-size    Require that each files cached size be larger than N bytes.\n" );
+    fprintf( stderr, "  -P --min-perc-cached    Require percentage of a file that must be cached.\n" );
+    fprintf( stderr, "  -h --help               Print this message.\n" );
 
 }
 
@@ -336,6 +383,8 @@ void show_headers() {
 
     printf( STR_FORMAT, "filename", "size", "total_pages", "cached_pages", "cached_size", "cached_perc" );
     printf( STR_FORMAT, "--------", "----", "-----------", "------------", "-----------", "-----------" );
+    
+    return;
 
 }
 
@@ -343,6 +392,106 @@ void show_headers() {
  * see README
  */
 int main(int argc, char *argv[]) {
+
+    int c;
+
+    static struct option long_options[] =
+        {
+            /* These options don't set a flag.
+               We distinguish them by their indices. */
+            {"summarize",         optional_argument,       0, 's'},
+            {"pages",             optional_argument,       0, 'p'},
+            {"only-cached",       optional_argument,       0, 'c'},
+            {"graph",             optional_argument,       0, 'g'},
+            {"verbose",           optional_argument,       0, 'v'},
+            {"min-size",          required_argument,       0, 'S'},
+            {"min-cached-size",   required_argument,       0, 'C'},
+            {"min-perc-cached",   required_argument,       0, 'P'},
+            {"help",              no_argument,             0, 'h'},
+            {0, 0, 0, 0}
+        };
+
+    while (1) {
+
+        /* getopt_long stores the option index here. */
+        int option_index = 0;
+        
+        c = getopt_long (argc, argv, "s::p::c::g::v::S:C:P:h",long_options, &option_index);
+        
+        /* Detect the end of the options. */
+        if (c == -1)
+            break;
+        
+        //bool foo = 1;
+
+        switch (c)
+            {
+            case 0:
+                /* If this option set a flag, do nothing else now. */
+                if (long_options[option_index].flag != 0)
+                    break;
+                if (optarg)
+                    printf (" with arg %s", optarg);
+                printf ("\n");
+                break;
+                
+            case 's':
+                arg_summarize = _argtobool( optarg );
+                break;
+                
+            case 'c':
+                arg_only_cached = _argtobool( optarg );
+                break;
+                
+            case 'g':
+                arg_graph = _argtobool( optarg );
+                break;
+
+            case 'v':
+                arg_verbose = _argtoint( optarg, 1 );
+                break;
+
+            case 'S':
+                arg_min_size = _argtoint( optarg, 0 );
+                break;
+
+            case 'C':
+                arg_min_cached_size = _argtoint( optarg, 0 );
+                break;
+
+            case 'P':
+                arg_min_perc_cached = _argtoint( optarg, 0 );
+                break;
+
+            case 'h':
+                help();
+                exit(1);
+
+            case '?':
+                /* getopt_long already printed an error message. */
+                break;
+                
+            default:
+
+                fprintf( stderr, "Invalid command line item: %s\n" , argv[ optind ] );
+                help();
+                
+                exit(1);
+            }
+    } // done processing arguments.
+
+   if ( arg_verbose >= 1 ) {
+
+       printf( "Running with arguments: \n" );
+       printf( "    pages:            %d\n",  arg_pages );
+       printf( "    summarize:        %d\n",  arg_summarize );
+       printf( "    only cached:      %d\n",  arg_only_cached );
+       printf( "    graph:            %d\n",  arg_graph );
+       printf( "    min size:         %ld\n", arg_min_size );
+       printf( "    min cached size:  %ld\n", arg_min_cached_size );
+       printf( "    min perc cached:  %ld\n", arg_min_perc_cached );
+
+   }
 
     setlocale( LC_NUMERIC, "en_US" );
 
@@ -360,78 +509,37 @@ int main(int argc, char *argv[]) {
 
     } 
 
-    int i = 1; 
 
-    if ( argc == 1 ) {
+    if ( optind == argc ) {
         help();
         exit(1);
-    }
-
-    //keep track of the file index.
-    int fidx = 1;
-
-    // parse command line options (TODO: move to GNU getopt)
-
-    for( ; i < argc; ++i ) {
-
-        if ( strcmp( "--pages=false" , argv[i] ) == 0 ) {
-            arg_pages = 0;
-            ++fidx;
-        }
-
-        if ( strcmp( "--pages=true" , argv[i] ) == 0 ) {
-            arg_pages = 1;
-            ++fidx;
-        }
-
-        if ( strcmp( "--summarize" , argv[i] ) == 0 ) {
-            arg_summarize = 1;
-            ++fidx;
-        }
-
-        if ( strcmp( "--only-cached" , argv[i] ) == 0 ) {
-            arg_only_cached = 1;
-            ++fidx;
-        }
-
-        if ( strstr( "--min-size=" , argv[i] ) != NULL ) {
-            //arg_min_size = atoi( ;
-            ++fidx;
-        }
-
-        if ( strcmp( "--graph" , argv[i] ) == 0 ) {
-            arg_graph = 1;
-            ++fidx;
-        }
-
-        if ( strcmp( "--help" , argv[i] ) == 0 ) {
-            help();
-            exit(1);
-        }
-
-        //TODO what if this starts -- but we don't know what option it is?
-
     }
 
     if ( ! arg_graph ) 
         show_headers();
 
     long total_cached_size = 0;
-
-    //TODO: mean cached percentage
-
-    for( ; fidx < argc; ++fidx ) {
-
-        char* path = argv[fidx];
-
-        struct fincore_result result;
-
-        fincore( path, &result );
-
-        total_cached_size += result.cached_size;
-
-    }
     
+    /* Print any remaining command line arguments (not options). */
+        
+    if (optind < argc) {
+        
+       while (optind < argc) {
+           
+           char* path = argv[optind++];
+
+            struct fincore_result result;
+
+            fincore( path, &result );
+
+            total_cached_size += result.cached_size;
+
+           //printf ("%s ", );
+           //putchar ('\n');
+       }
+
+   }
+
     if ( arg_summarize ) {
         
         printf( "---\n" );
