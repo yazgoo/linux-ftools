@@ -15,7 +15,7 @@
 #include <sys/ioctl.h> 
 
 char STR_FORMAT[] =  "%-80s %18s %18s %18s %18s %18s\n";
-char DATA_FORMAT[] = "%-80s %'18ld %'18d %'18d %'18ld %18.2f\n";
+char DATA_FORMAT[] = "%-80s %'18ld %'18d %'18ld %'18ld %18.2f\n";
 
 long DEFAULT_NR_REGIONS       = 160;  // default number of regions
 
@@ -40,16 +40,11 @@ static double *region_percs   = NULL;
 
 //TODO:
 //
-// - pretty print integers with commas... 
-// 
-// - ability to print graph width and height width
+// - ability to adjust print graph width and height width from the command line.
 //
 // - convert ALL the variables used to store stats to longs.
 //
 // - option to print symbols in human readable form (1GB, 2.1GB , 300KB
-//
-// - we trip a bug with free(regions) but only when it's not 106... what is this
-//   about?   This prevents custom graph widths.
 //
 // - only call setlocale() if it's not currently set.
 // 
@@ -202,11 +197,13 @@ void fincore(char* path,
     int i; 
 
     // the number of pages that we have detected that are cached 
-    // FIXME: should be a long
-    unsigned int cached = 0;
+    size_t cached = 0;
+
     // the number of pages that we have printed 
-    // FIXME: should be a long
-    unsigned int printed = 0;
+    size_t printed = 0;
+
+    //the total number of pages we're working with
+    size_t total_pages;
 
     // by default the cached size is zero so initialize this member.
     result->cached_size = 0;
@@ -282,9 +279,7 @@ void fincore(char* path,
         exit( 1 );
     }
 
-    int total_pages = (int)ceil( (double)file_stat.st_size / (double)page_size );
-
-    //init this array ...
+    total_pages = (int)ceil( (double)file_stat.st_size / (double)page_size );
 
     int region_ptr = (int)((total_pages - 1) / nr_regions);
 
@@ -299,12 +294,10 @@ void fincore(char* path,
             }
 
             if ( region_ptr > 0 ) {
-
                 int region = (int)(page_index / region_ptr );
-
                 ++regions[region];
-
             }
+
         }
 
     }
@@ -313,13 +306,17 @@ void fincore(char* path,
 
     double cached_perc = 100 * (cached / (double)total_pages); 
 
-    long cached_size = (long)cached * (long)page_size;
+    size_t cached_size = (long)cached * (long)page_size;
 
     if ( arg_min_cached_size > 0 && cached_size <= arg_min_cached_size ) {
         goto cleanup;
     }
 
     if ( arg_min_cached_perc > 0 && cached_perc <= arg_min_cached_perc ) {
+        goto cleanup;
+    }
+
+    if ( arg_min_size > 0 && file_stat.st_size <= arg_min_size ) {
         goto cleanup;
     }
 
