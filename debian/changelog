@@ -1,3 +1,6 @@
+linux-ftools (1.1.0) stable; urgency=high
+  * Fixed a number of bugs and package is now stable
+
 linux-ftools (1.0.0) unstable; urgency=low
 
   * Initial Release.
