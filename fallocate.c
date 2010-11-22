@@ -42,12 +42,28 @@ larger range than that which was specified.
 
 */
 
+void logstats(int fd) {
+
+    struct stat fd_stat ;
+
+    if ( fstat( fd, &fd_stat )  < 0 ) {
+        perror( "Could not stat file" );
+        exit(1);
+    }
+
+    printf( "File stats: \n" );
+    printf( "    Length:            %ld\n", fd_stat.st_size );
+    printf( "    Block size:        %ld\n", fd_stat.st_blksize );
+    printf( "    Blocks allocated:  %ld\n" , fd_stat.st_blocks );
+
+}
+
 int main(int argc, char *argv[]) {
 
-    if ( argc != 4 ) {
+    if ( argc != 3 ) {
         fprintf( stderr, "%s version %s\n", argv[0], LINUX_FTOOLS_VERSION );
         fprintf( stderr, "SYNTAX: fallocate file length\n" );
-        return 1;
+        exit(1);
     }
 
     char* path = argv[1];
@@ -59,47 +75,46 @@ int main(int argc, char *argv[]) {
 
     if ( fd == -1 ) {
         perror( "Unable to open file" );
-        return 1;
+        exit(1);
     }
 
-    struct stat fd_stat ;
-
-    if ( fstat( fd, &fd_stat )  < 0 ) {
-        perror( "Could not stat file" );
-        return 1;
-    }
-
-    printf( "Current length: %ld\n", fd_stat.st_size );
-    printf( "Current block size: %ld\n", fd_stat.st_blksize );
-    printf( "Current blocks allocated: %ld\n" , fd_stat.st_blocks );
+    logstats(fd);
 
     size_t increase = atol( argv[2] );
 
     printf( "Increasing file to: %ld\n", increase );
 
+    if ( increase <= 0 ) {
+        fprintf( stderr, "Unable to allocate size %ld\n", increase );
+        exit( 1 );
+    }
+
     loff_t offset = 0;
     loff_t len = increase;
 
-    //int mode = 0;
     //TODO: make this a command line option.
     int mode = FALLOC_FL_KEEP_SIZE;
-
-    //long result = fallocate( fd, mode, offset, len );
-    //long result = posix_fallocate( fd, offset, len );
 
     long result = syscall( SYS_fallocate, fd, mode, offset, len );
 
     if ( result != 0 ) {
 
+        //TODO: rework this error handling
         if ( result != -1 ) {
             errno=result;
             perror( "Unable to fallocate" );
+            exit( 1 );
         } else {
-            printf( "Unable to fallocate: %ld\n" , result );
+            char buff[100];
+            sprintf( buff, "Unable to fallocate: %ld\n" , result );
+            perror( buff );
+            exit( 1 );
         }
 
         return 1;
     }
+
+    logstats(fd);
 
     close( fd );
     return 0;
