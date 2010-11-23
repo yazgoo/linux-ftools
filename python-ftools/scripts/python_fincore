@@ -1,0 +1,133 @@
+#!/usr/bin/env python
+
+import sys
+import ftools
+import resource
+import optparse
+import os
+import stat
+
+
+def convert_bytes(bytes):
+    bytes = float(bytes)
+    if bytes >= 1099511627776:
+        terabytes = bytes / 1099511627776
+        size = '%.2fT' % terabytes
+    elif bytes >= 1073741824:
+        gigabytes = bytes / 1073741824
+        size = '%.2fG' % gigabytes
+    elif bytes >= 1048576:
+        megabytes = bytes / 1048576
+        size = '%.2fM' % megabytes
+    elif bytes >= 1024:
+        kilobytes = bytes / 1024
+        size = '%.2fK' % kilobytes
+    else:
+        size = '%.2fb' % bytes
+    return size
+
+
+def matrix_to_string(matrix, header):
+    """
+Note: this function is from: http://mybravenewworld.wordpress.com/2010/09/19/print-tabular-data-nicely-using-python/
+i modified it a bit. ;-)
+
+ Return a pretty, aligned string representation
+ of a nxm matrix.
+ 
+ This representation can be used to print any
+ tabular data, such as database results. It
+ works by scanning the lengths of each element
+ in each column, and determining the format
+ string dynamically.
+ 
+ @param matrix: Matrix representation (list with n rows
+  of m elements).
+ @param header: Optional tuple with header elements to be
+  displayed.
+    """
+    lengths = []
+    matrix = [header] + matrix
+    for row in matrix:
+        for column in row:
+            i = row.index(column)
+            cl = len(str(column))
+            try:
+                ml = lengths[i]
+                if cl > ml:
+                    lengths[i] = cl
+            except IndexError:
+                lengths.append(cl)
+ 
+    lengths = tuple(lengths)
+    format_string = ""
+    for length in lengths:
+        format_string += "%-" + str(length) + "s    "
+    format_string += "\n"
+ 
+    matrix_str = ""
+    #matrix_str += format_string % header
+    for row in matrix:
+        matrix_str += format_string % tuple(row)
+ 
+    return matrix_str
+
+
+
+def main():
+    parser = optparse.OptionParser(description="Determine how much of a file is in filesystem page-cache.")
+
+    parser.add_option('-d', '--directory', dest='directory', default=None,
+                      help="Recursively descend into a directory")
+    parser.add_option('-s', '--summary', dest='summary', default=False, action='store_true',
+                      help="Summarize report")
+
+    options, args = parser.parse_args()
+
+    if len(args) == 0 and options.directory == None:
+        parser.print_help()
+        return 1
+
+    page_size = resource.getpagesize()
+    header = ['filename', 'file size', 'total pages', 'pages cached', 'cached size', 'percentage cached']
+    rows = []
+
+    if options.directory:
+        for (path, dirs, files) in os.walk(options.directory):
+            for myfile in files:
+                f = os.path.join(path,myfile)
+                fd = file(f,'r')
+                file_size = os.fstat(fd.fileno())[stat.ST_SIZE]
+                if file_size == 0:
+                    fd.close()
+                    continue
+                pages_cached, pages_total = ftools.fincore_ratio(fd.fileno())
+                fd.close()
+                rows.append([f, file_size, pages_total, pages_cached, (pages_cached * page_size), (float(pages_cached) / float(pages_total)) * 100.0])
+
+    for f in args:
+        fd = file(f, 'r')
+        file_size = os.fstat(fd.fileno())[stat.ST_SIZE]
+        if file_size == 0:
+            fd.close()
+            continue
+        pages_cached, pages_total = ftools.fincore_ratio(fd.fileno())
+        fd.close()
+        rows.append([f, file_size, pages_total, pages_cached, (pages_cached * page_size), (float(pages_cached) / float(pages_total)) * 100.0])
+
+    rows = sorted(rows, key=lambda t:t[5], reverse=True)
+    result = matrix_to_string(rows, header)
+    print result
+
+    if options.summary:
+        file_size_total, pages_total, pages_cached_total, pages_cached_size_total = map(sum, zip(*rows)[1:-1])
+        sum_header = ['total file sizes','total file pages', 'total pages cached', 'total cached pages size', 'total percentage cached']
+        total_percentage_cached = (float(pages_cached_total) / float(pages_total)) * 100.0
+        summary_row = [convert_bytes(file_size_total), pages_total, pages_cached_total, convert_bytes(pages_cached_size_total), total_percentage_cached]
+        summary_line = matrix_to_string([summary_row], sum_header)
+        print summary_line
+ 
+if __name__ == '__main__':
+    main()
+
+
