@@ -1,0 +1,207 @@
+#!/usr/bin/env python
+
+# Copyright 2010 Tailrank, Inc.
+# 
+# Licensed under the Apache License, Version 2.0 (the "License"); you may not
+# use this file except in compliance with the License.  You may obtain a copy
+# of the License at
+# 
+#      http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
+# License for the specific language governing permissions and limitations under
+# the License.
+#
+# author: David Stainton
+#
+
+__author__ = "David Stainton"
+__copyright__ = "Copyright 2010 Tailrank, Inc."
+__license__ = "Apache License"
+
+import os
+import time
+import stat
+import optparse
+
+import sys
+import ftools
+
+
+PAGE_SIZE = 4096
+
+
+def main():
+
+    parser = optparse.OptionParser()
+
+    parser.add_option('--evict', dest='evict', default=False, action='store_true',
+                      help="Evict historical region of files")
+    parser.add_option('--summary', dest='summary', default=False, action='store_true',
+                      help="Summarize page cache usage of file regions")
+
+    parser.add_option("--hist-log-dir", dest="hist_log_dir", default=None, action="store", type="string",
+                      help="historical log directory")
+    parser.add_option("--evict-time", dest="evict_time", default=None, action="store", type="string", 
+                      help="eviction time")
+    
+    options, args = parser.parse_args()
+
+
+    if not options.evict_time or not options.hist_log_dir:
+        parser.print_help()
+        return 1
+
+    if (options.summary and options.evict) or (not options.summary and not options.evict):
+        parser.print_help()
+        return 1
+
+    if len(args) < 2:
+        parser.print_help()
+        return 1
+
+    evict_time   = int(options.evict_time)
+    files        = args
+
+    if options.summary:
+        region_cache_stats(files, evict_time, options.hist_log_dir)
+
+    if options.evict:
+        evict_historical_regions(files, evict_time, options.hist_log_dir)
+
+    return 0
+
+
+def region_cache_stats(files, evict_time, hist_log_dir):
+
+    for pathname in files:
+        if not non_zero_file(pathname):
+            print "%s: skipping zero size file" % pathname
+            continue
+
+        offset = historical_file_size(pathname, evict_time, hist_log_dir)
+        if offset == 0:
+            print "%s: no historical record for that evict_time. skipping file" % pathname
+            continue
+        before_percentage, before_page_num, after_percentage, after_page_num = percent_pagecache_used_by_region(pathname, offset)
+        after_cached_size = convert_bytes(after_page_num * PAGE_SIZE)
+        before_cached_size = convert_bytes(before_page_num * PAGE_SIZE)
+        print "%s before: %s %s after: %s %s" % (pathname, before_percentage, before_cached_size, after_percentage, after_cached_size)
+
+
+def convert_bytes(bytes):
+    bytes = float(bytes)
+    if bytes >= 1099511627776:
+        terabytes = bytes / 1099511627776
+        size = '%.2fT' % terabytes
+    elif bytes >= 1073741824:
+        gigabytes = bytes / 1073741824
+        size = '%.2fG' % gigabytes
+    elif bytes >= 1048576:
+        megabytes = bytes / 1048576
+        size = '%.2fM' % megabytes
+    elif bytes >= 1024:
+        kilobytes = bytes / 1024
+        size = '%.2fK' % kilobytes
+    else:
+        size = '%.2fb' % bytes
+    return size
+
+
+def non_zero_file(myfile):
+    fd = file(myfile,'r')
+    file_size = os.fstat(fd.fileno())[stat.ST_SIZE]
+    fd.close()
+    if file_size != 0:
+        return True
+    else:
+        return False
+
+def evict_historical_regions(files, evict_time, hist_log_dir):
+    for f in files:
+        if not non_zero_file(f):
+            continue
+        offset = historical_file_size(f, evict_time, hist_log_dir)
+        if offset != 0:
+            evict_early_region_from_file(f, offset)
+
+# for a given file evict pages from filesystem
+# page cache before specified offset
+def evict_early_region_from_file(pathname, hist_offset):
+    print "fadvise %s offset=0 length=%s" % (pathname, hist_offset)
+    fd = file(pathname, 'r')
+    ftools.fadvise(fd.fileno(),mode='POSIX_FADV_DONTNEED', offset=0, length=hist_offset)
+    fd.close()
+
+
+def count_pages(page_vector):
+    cached = 0
+    for page in page_vector:
+        if ord(page) & 0x01:
+            cached += 1
+    return cached
+
+def percent_pagecache_used_by_region(pathname, offset):
+    fd = file(pathname,'r')
+    vec = ftools.fincore(fd.fileno())
+    fd.close()
+
+    page_offset = int(offset/PAGE_SIZE)
+    after_slice = vec[page_offset:]
+    before_slice = vec[:page_offset]
+
+    before_cached = count_pages(before_slice)
+    before_total = len(before_slice)
+    before_percentage = (float(before_cached) / float(before_total)) * 100.0
+
+    after_cached = count_pages(after_slice)
+    after_total = len(after_slice)
+    after_percentage = (float(after_cached) / float(after_total)) * 100.0
+
+    return before_percentage, before_cached, after_percentage, after_cached
+
+
+def compare_times(my_time, my_size, best_time, best_size, target_time):
+    result_time = best_time
+    result_size = best_size
+    if my_time <= target_time and my_time > best_time:
+        result_time = my_time
+        result_size = my_size
+    return result_time, result_size
+
+
+# This function analyzes the file_size reports and
+# returns the file size that the file had at nsecs seconds in the past...
+# For files that are being appended to, this historical
+# file size could be used as an offset in the file...
+
+def historical_file_size(pathname, nsecs, log_dir):
+
+    now         = time.time()
+    target_time = now - nsecs
+    best_time   = 0
+    best_size   = 0
+
+    target_file = os.path.basename(pathname)
+    log_files = os.listdir(log_dir)
+
+    for f in log_files:
+        log_path = os.path.join(log_dir, f)
+        log_fh = open(log_path, 'r')
+
+        for line in log_fh:
+            my_file, my_time, my_size = line.split()
+            if my_file != target_file:
+                continue
+            best_time, best_size = compare_times(int(my_time), int(my_size), best_time, best_size, target_time)
+
+        log_fh.close()
+
+    return best_size
+
+
+if __name__ == '__main__':
+    sys.exit(main())
+

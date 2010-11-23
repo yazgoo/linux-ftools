@@ -1,13 +1,3 @@
-#include <linux/falloc.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <sys/syscall.h>
-#include <asm/unistd_64.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <stdlib.h>
 #include <linux-ftools.h>
 
 /** 
@@ -42,6 +32,22 @@ larger range than that which was specified.
 
 */
 
+
+// wrapper function for strerror(errno)
+char* make_error_string(char* message) {
+
+    char* error_string;
+
+    if( (asprintf(&error_string, "%s: %s", message, strerror(errno))) == -1)
+    {   
+        fprintf (stderr,"asprintf: out of memory\n");
+        exit(1);
+    }
+
+    return error_string;
+}
+
+
 void logstats(int fd) {
 
     struct stat fd_stat ;
@@ -61,6 +67,7 @@ void logstats(int fd) {
 int main(int argc, char *argv[]) {
 
     if ( argc != 3 ) {
+        //fprintf( stderr, "sizeof %ll\n", sizeof(loff_t));
         fprintf( stderr, "%s version %s\n", argv[0], LINUX_FTOOLS_VERSION );
         fprintf( stderr, "SYNTAX: fallocate file length\n" );
         exit(1);
@@ -89,14 +96,10 @@ int main(int argc, char *argv[]) {
         exit( 1 );
     }
 
-    loff_t offset = 0;
-    loff_t len = increase;
-
-    //TODO: make this a command line option.
-    int mode = FALLOC_FL_KEEP_SIZE;
-
-    long result = syscall( SYS_fallocate, fd, mode, offset, len );
-
+    fallocate_result my_result;
+    my_result = fallocate(path, increase);
+    long result = my_result.return_value;
+    
     if ( result != 0 ) {
 
         //TODO: rework this error handling
@@ -120,3 +123,61 @@ int main(int argc, char *argv[]) {
     return 0;
 
 }
+
+
+fallocate_result fallocate(char* path, unsigned long increase) {
+
+    fallocate_result result;
+    result.error_string = NULL;
+    result.return_value = 0;
+    result.error_state  = FALSE;
+
+    int flags = O_RDWR;
+    int fd = open( path, flags );
+
+    if ( fd == -1 ) {
+        result.error_string = make_error_string("Unable to fallocate: Unable to open file");
+        result.error_state  = TRUE;
+        goto cleanup;
+    }
+
+    if ( increase <= 0 ) {
+        result.error_string = "Invalid allocation size";
+        result.return_value = 1;
+        result.error_state  = TRUE;
+        goto cleanup;
+    }
+
+    loff_t offset = 0;
+    loff_t length = increase;
+
+    int mode = FALLOC_FL_KEEP_SIZE;
+
+    result.return_value = syscall( SYS_fallocate, fd, mode, offset, length );
+
+    if ( result.return_value != 0 ) {
+        errno=result.return_value;
+
+        if ( result.return_value != -1 ) {
+            result.error_string = make_error_string("Unable to fallocate");
+            result.error_state  = TRUE;
+            goto cleanup;
+        } else {
+            char buff[300];
+            sprintf( buff, "Unable to fallocate: %ld\n" , result.return_value );
+            result.error_string = make_error_string(buff);
+            result.error_state  = TRUE;
+            goto cleanup;
+        }
+
+        result.error_string = make_error_string("Unable to fallocate");
+        result.error_state  = TRUE;
+        goto cleanup;
+
+    }
+
+ cleanup:
+    close(fd);
+    return result;
+}
+
