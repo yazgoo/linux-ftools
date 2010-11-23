@@ -10,6 +10,11 @@
 #include <stdlib.h>
 #include <linux-ftools.h>
 
+/*
+  - 
+
+*/
+
 /** 
 
 SYNTAX: fallocate file length
@@ -80,17 +85,16 @@ int main(int argc, char *argv[]) {
 
     logstats(fd);
 
-    size_t increase = atol( argv[2] );
+    loff_t len = atol( argv[2] );
 
-    printf( "Increasing file to: %ld\n", increase );
+    printf( "Increasing file to: %ld\n", len );
 
-    if ( increase <= 0 ) {
-        fprintf( stderr, "Unable to allocate size %ld\n", increase );
+    if ( len <= 0 ) {
+        fprintf( stderr, "Unable to allocate size %ld\n", len );
         exit( 1 );
     }
 
     loff_t offset = 0;
-    loff_t len = increase;
 
     //TODO: make this a command line option.
     int mode = FALLOC_FL_KEEP_SIZE;
