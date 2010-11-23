@@ -435,7 +435,11 @@ int main(int argc, char *argv[]) {
                     printf (" with arg %s", optarg);
                 printf ("\n");
                 break;
-                
+
+            case 'p':
+                arg_pages = _argtobool( optarg );
+                break;
+
             case 's':
                 arg_summarize = _argtobool( optarg );
                 break;
