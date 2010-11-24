@@ -87,17 +87,17 @@ int main(int argc, char *argv[]) {
 
     logstats(fd);
 
-    size_t increase = atol( argv[2] );
+    size_t length = atol( argv[2] );
 
-    printf( "Increasing file to: %ld\n", increase );
+    printf( "Increasing file to: %ld\n", length );
 
-    if ( increase <= 0 ) {
-        fprintf( stderr, "Unable to allocate size %ld\n", increase );
+    if ( length <= 0 ) {
+        fprintf( stderr, "Unable to allocate size %ld\n", length );
         exit( 1 );
     }
 
     fallocate_result my_result;
-    my_result = fallocate(path, increase);
+    my_result = fallocate(path, length);
     long result = my_result.return_value;
     
     if ( result != 0 ) {
@@ -125,7 +125,7 @@ int main(int argc, char *argv[]) {
 }
 
 
-fallocate_result fallocate(char* path, unsigned long increase) {
+fallocate_result fallocate(char* path, unsigned long length) {
 
     fallocate_result result;
     result.error_string = NULL;
@@ -141,7 +141,7 @@ fallocate_result fallocate(char* path, unsigned long increase) {
         goto cleanup;
     }
 
-    if ( increase <= 0 ) {
+    if ( length <= 0 ) {
         result.error_string = "Invalid allocation size";
         result.return_value = 1;
         result.error_state  = TRUE;
@@ -149,7 +149,6 @@ fallocate_result fallocate(char* path, unsigned long increase) {
     }
 
     loff_t offset = 0;
-    loff_t length = increase;
 
     int mode = FALLOC_FL_KEEP_SIZE;
 

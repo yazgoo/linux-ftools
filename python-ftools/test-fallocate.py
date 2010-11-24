@@ -11,8 +11,8 @@ def main():
         print 'Usage: %s <filename>' % sys.argv[0]
         return
 
-    length = 4097
-    ftools.fallocate(path=sys.argv[1], increase=length)
+    length = 60
+    ftools.fallocate(path=sys.argv[1], length=length)
 
 if __name__ == '__main__':
     main()
