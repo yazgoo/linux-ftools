@@ -1,7 +1,7 @@
 from distutils.core import setup, Extension
 
-setup(name='python-ftools',
-    version='0.1',
+setup(name='ftools',
+    version='0.2.0',
     author='David Stainton',
     author_email='dstainton415@gmail.com',
     ext_modules=[
