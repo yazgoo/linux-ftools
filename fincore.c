@@ -403,6 +403,7 @@ void help() {
     fprintf( stderr, "  -C --min-cached-size    Require that each files cached size be larger than N bytes.\n" );
     fprintf( stderr, "  -P --min-perc-cached    Require percentage of a file that must be cached.\n" );
     fprintf( stderr, "  -h --help               Print this message.\n" );
+    fprintf( stderr, "  -L --vertical           Print the output of this script vertically.\n" );
 
 }
 
