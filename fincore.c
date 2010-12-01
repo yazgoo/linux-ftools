@@ -335,14 +335,28 @@ void fincore(char* path,
             _show_headers();
         }
 
-        printf( DATA_FORMAT, 
-                path, 
-                file_stat.st_size , 
-                total_pages , 
-                min_cached_page,
-                cached ,  
-                cached_size , 
-                cached_perc );
+        if ( arg_vertical ) {
+
+            printf( "%s\n", path );
+            printf( "size: %'ld\n", file_stat.st_size );
+            printf( "total_pages: %'ld\n", total_pages );
+            printf( "min_cached_page: %'ld\n", min_cached_page );
+            printf( "cached: %'ld\n", cached );
+            printf( "cached_size: %'ld\n", cached_size );
+            printf( "cached_perc: %.2f\n", cached_perc );
+
+        } else { 
+
+            printf( DATA_FORMAT, 
+                    path, 
+                    file_stat.st_size , 
+                    total_pages , 
+                    min_cached_page,
+                    cached ,  
+                    cached_size , 
+                    cached_perc );
+
+        }
 
         for( i = 0 ; i < nr_regions; ++i ) {
             region_percs[i] = perc(regions[i], region_ptr );
@@ -512,6 +526,7 @@ int main(int argc, char *argv[]) {
        printf( "    min size:         %ld\n", arg_min_size );
        printf( "    min cached size:  %ld\n", arg_min_cached_size );
        printf( "    min cached perc:  %ld\n", arg_min_cached_perc );
+       printf( "    vertical:         %ld\n", arg_vertical );
 
    }
 
