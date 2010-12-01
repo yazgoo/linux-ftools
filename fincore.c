@@ -25,6 +25,7 @@ int arg_summarize             = 1;    // print a summary at the end.
 int arg_only_cached           = 0;    // only show cached files
 int arg_graph                 = 0;    // graph the page distribution of files.
 int arg_verbose               = 0;    // level of verbosity.
+int arg_vertical              = 0;    // print variables vertical
 
 long arg_min_size             = -1;   // required minimum size for files or we ignore them.
 long arg_min_cached_size      = -1;   // required minimum percent cached for files or we ignore them.
@@ -393,7 +394,7 @@ void help() {
 
 void _show_headers() {
 
-    printf( STR_FORMAT, "filename", "size", "total pages", "min cached page", "cached pages", "cached size", "cached perc" );
+    printf( STR_FORMAT, "filename", "size", "total_pages", "min_cached page", "cached_pages", "cached_size", "cached_perc" );
     printf( STR_FORMAT, "--------", "----", "-----------", "---------------", "------------", "-----------", "-----------" );
     
     return;
@@ -420,6 +421,7 @@ int main(int argc, char *argv[]) {
             {"min-cached-size",   required_argument,       0, 'C'},
             {"min-cached-perc",   required_argument,       0, 'P'},
             {"help",              no_argument,             0, 'h'},
+            {"vertical",          no_argument,             0, 'L'},
             {0, 0, 0, 0}
         };
 
@@ -428,7 +430,7 @@ int main(int argc, char *argv[]) {
         /* getopt_long stores the option index here. */
         int option_index = 0;
         
-        c = getopt_long (argc, argv, "s::p::c::g::v::S:C:P:h",long_options, &option_index);
+        c = getopt_long (argc, argv, "s::p::c::g::v::L::S:C:P:h",long_options, &option_index);
         
         /* Detect the end of the options. */
         if (c == -1)
@@ -477,6 +479,10 @@ int main(int argc, char *argv[]) {
 
             case 'P':
                 arg_min_cached_perc = _argtoint( optarg, 0 );
+                break;
+
+            case 'L':
+                arg_vertical = _argtoint( optarg, 1 );
                 break;
 
             case 'h':
