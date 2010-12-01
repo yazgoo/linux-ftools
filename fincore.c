@@ -14,8 +14,8 @@
 #include <locale.h>
 #include <sys/ioctl.h> 
 
-char STR_FORMAT[] =  "%-80s %18s %18s %18s %18s %18s\n";
-char DATA_FORMAT[] = "%-80s %'18ld %'18d %'18ld %'18ld %18.2f\n";
+char STR_FORMAT[] =  "%-80s %18s %18s %18s %18s %18s %18s\n";
+char DATA_FORMAT[] = "%-80s %'18ld %'18d %'18ld %'18ld %'18ld %18.2f\n";
 
 long DEFAULT_NR_REGIONS       = 160;  // default number of regions
 
@@ -205,6 +205,9 @@ void fincore(char* path,
     //the total number of pages we're working with
     size_t total_pages;
 
+    //the oldest page in the cache or -1 if it isn't in the cache.
+    off_t min_cached_page = -1 ;
+
     // by default the cached size is zero so initialize this member.
     result->cached_size = 0;
 
@@ -263,11 +266,11 @@ void fincore(char* path,
         goto cleanup;      
     }
 
-    mincore_vec = calloc(1, (file_stat.st_size+page_size-1)/page_size);
+    size_t calloc_size = (file_stat.st_size+page_size-1)/page_size;
+
+    mincore_vec = calloc(1, calloc_size);
 
     if ( mincore_vec == NULL ) {
-        //something is really wrong here.  Just exit.
-        //FIXME: print the file we're running from.
         perror( "Could not calloc" );
         exit( 1 );
     }
@@ -286,7 +289,12 @@ void fincore(char* path,
     for (page_index = 0; page_index <= file_stat.st_size/page_size; page_index++) {
 
         if (mincore_vec[page_index]&1) {
+
             ++cached;
+
+            if ( min_cached_page == -1 || page_index < min_cached_page ) {
+                min_cached_page = page_index;
+            }
 
             if ( arg_pages ) {
                 printf("%lu ", (unsigned long)page_index);
@@ -330,6 +338,7 @@ void fincore(char* path,
                 path, 
                 file_stat.st_size , 
                 total_pages , 
+                min_cached_page,
                 cached ,  
                 cached_size , 
                 cached_perc );
@@ -349,8 +358,10 @@ void fincore(char* path,
 
  cleanup:
 
-    if ( mincore_vec != NULL )
+    if ( mincore_vec != NULL ) {
         free(mincore_vec);
+        mincore_vec = NULL;
+    }
 
     if ( file_mmap != MAP_FAILED )
         munmap(file_mmap, file_stat.st_size);
@@ -382,8 +393,8 @@ void help() {
 
 void _show_headers() {
 
-    printf( STR_FORMAT, "filename", "size", "total_pages", "cached_pages", "cached_size", "cached_perc" );
-    printf( STR_FORMAT, "--------", "----", "-----------", "------------", "-----------", "-----------" );
+    printf( STR_FORMAT, "filename", "size", "total pages", "min cached page", "cached pages", "cached size", "cached perc" );
+    printf( STR_FORMAT, "--------", "----", "-----------", "---------------", "------------", "-----------", "-----------" );
     
     return;
 
