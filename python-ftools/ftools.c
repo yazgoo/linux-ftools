@@ -115,15 +115,15 @@ static PyObject *ftools_fincore_ratio(PyObject *self, PyObject *args) {
 // ftools.fadvise
 static PyObject *ftools_fadvise(PyObject *self, PyObject *args, PyObject *keywds) {
     int fd;
-    int offset = 0;
-    int length = 0;
+    long int offset = 0;
+    long int length = 0;
     char* str_mode = "";
     char* errstr;
     struct stat file_stat;
 
     static char *kwlist[] = {"fd","mode", "offset", "length", NULL};
 
-    if (!PyArg_ParseTupleAndKeywords(args, keywds, "is|ii", kwlist, 
+    if (!PyArg_ParseTupleAndKeywords(args, keywds, "is|ll", kwlist, 
                                      &fd, &str_mode, &offset, &length)) {
         return NULL; 
     }
