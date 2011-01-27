@@ -146,7 +146,7 @@ int main(int argc, char *argv[]) {
     } else if ( strcmp( param_mode , "POSIX_FADV_SEQUENTIAL" ) == 0 ) {
         mode = POSIX_FADV_SEQUENTIAL;
     } else if ( strcmp( param_mode , "POSIX_FADV_WILLNEED" ) == 0 ) {
-        mode = POSIX_FADV_DONTNEED;
+        mode = POSIX_FADV_WILLNEED;
     } else if ( strcmp( param_mode , "POSIX_FADV_DONTNEED" ) == 0 ) {
         mode = POSIX_FADV_DONTNEED;
     } else if ( strcmp( param_mode , "POSIX_FADV_NOREUSE" ) == 0 ) {
