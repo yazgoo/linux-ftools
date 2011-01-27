@@ -14,8 +14,8 @@
 #include <locale.h>
 #include <sys/ioctl.h> 
 
-char STR_FORMAT[] =  "%-80s %18s %18s %18s %18s %18s\n";
-char DATA_FORMAT[] = "%-80s %'18ld %'18d %'18ld %'18ld %18.2f\n";
+char STR_FORMAT[] =  "%-80s %18s %18s %18s %18s %18s %18s\n";
+char DATA_FORMAT[] = "%-80s %'18ld %'18d %'18ld %'18ld %'18ld %18.2f\n";
 
 long DEFAULT_NR_REGIONS       = 160;  // default number of regions
 
@@ -25,6 +25,7 @@ int arg_summarize             = 1;    // print a summary at the end.
 int arg_only_cached           = 0;    // only show cached files
 int arg_graph                 = 0;    // graph the page distribution of files.
 int arg_verbose               = 0;    // level of verbosity.
+int arg_vertical              = 0;    // print variables vertical
 
 long arg_min_size             = -1;   // required minimum size for files or we ignore them.
 long arg_min_cached_size      = -1;   // required minimum percent cached for files or we ignore them.
@@ -205,6 +206,9 @@ void fincore(char* path,
     //the total number of pages we're working with
     size_t total_pages;
 
+    //the oldest page in the cache or -1 if it isn't in the cache.
+    off_t min_cached_page = -1 ;
+
     // by default the cached size is zero so initialize this member.
     result->cached_size = 0;
 
@@ -263,11 +267,11 @@ void fincore(char* path,
         goto cleanup;      
     }
 
-    mincore_vec = calloc(1, (file_stat.st_size+page_size-1)/page_size);
+    size_t calloc_size = (file_stat.st_size+page_size-1)/page_size;
+
+    mincore_vec = calloc(1, calloc_size);
 
     if ( mincore_vec == NULL ) {
-        //something is really wrong here.  Just exit.
-        //FIXME: print the file we're running from.
         perror( "Could not calloc" );
         exit( 1 );
     }
@@ -286,7 +290,12 @@ void fincore(char* path,
     for (page_index = 0; page_index <= file_stat.st_size/page_size; page_index++) {
 
         if (mincore_vec[page_index]&1) {
+
             ++cached;
+
+            if ( min_cached_page == -1 || page_index < min_cached_page ) {
+                min_cached_page = page_index;
+            }
 
             if ( arg_pages ) {
                 printf("%lu ", (unsigned long)page_index);
@@ -326,13 +335,28 @@ void fincore(char* path,
             _show_headers();
         }
 
-        printf( DATA_FORMAT, 
-                path, 
-                file_stat.st_size , 
-                total_pages , 
-                cached ,  
-                cached_size , 
-                cached_perc );
+        if ( arg_vertical ) {
+
+            printf( "%s\n", path );
+            printf( "size: %'ld\n", file_stat.st_size );
+            printf( "total_pages: %'ld\n", total_pages );
+            printf( "min_cached_page: %'ld\n", min_cached_page );
+            printf( "cached: %'ld\n", cached );
+            printf( "cached_size: %'ld\n", cached_size );
+            printf( "cached_perc: %.2f\n", cached_perc );
+
+        } else { 
+
+            printf( DATA_FORMAT, 
+                    path, 
+                    file_stat.st_size , 
+                    total_pages , 
+                    min_cached_page,
+                    cached ,  
+                    cached_size , 
+                    cached_perc );
+
+        }
 
         for( i = 0 ; i < nr_regions; ++i ) {
             region_percs[i] = perc(regions[i], region_ptr );
@@ -349,8 +373,10 @@ void fincore(char* path,
 
  cleanup:
 
-    if ( mincore_vec != NULL )
+    if ( mincore_vec != NULL ) {
         free(mincore_vec);
+        mincore_vec = NULL;
+    }
 
     if ( file_mmap != MAP_FAILED )
         munmap(file_mmap, file_stat.st_size);
@@ -377,13 +403,15 @@ void help() {
     fprintf( stderr, "  -C --min-cached-size    Require that each files cached size be larger than N bytes.\n" );
     fprintf( stderr, "  -P --min-perc-cached    Require percentage of a file that must be cached.\n" );
     fprintf( stderr, "  -h --help               Print this message.\n" );
+    fprintf( stderr, "  -L --vertical           Print the output of this script vertically.\n" );
+    fprintf( stderr, "\n" );
 
 }
 
 void _show_headers() {
 
-    printf( STR_FORMAT, "filename", "size", "total_pages", "cached_pages", "cached_size", "cached_perc" );
-    printf( STR_FORMAT, "--------", "----", "-----------", "------------", "-----------", "-----------" );
+    printf( STR_FORMAT, "filename", "size", "total_pages", "min_cached page", "cached_pages", "cached_size", "cached_perc" );
+    printf( STR_FORMAT, "--------", "----", "-----------", "---------------", "------------", "-----------", "-----------" );
     
     return;
 
@@ -409,6 +437,7 @@ int main(int argc, char *argv[]) {
             {"min-cached-size",   required_argument,       0, 'C'},
             {"min-cached-perc",   required_argument,       0, 'P'},
             {"help",              no_argument,             0, 'h'},
+            {"vertical",          no_argument,             0, 'L'},
             {0, 0, 0, 0}
         };
 
@@ -417,7 +446,7 @@ int main(int argc, char *argv[]) {
         /* getopt_long stores the option index here. */
         int option_index = 0;
         
-        c = getopt_long (argc, argv, "s::p::c::g::v::S:C:P:h",long_options, &option_index);
+        c = getopt_long (argc, argv, "s::p::c::g::v::L::S:C:P:h",long_options, &option_index);
         
         /* Detect the end of the options. */
         if (c == -1)
@@ -435,7 +464,11 @@ int main(int argc, char *argv[]) {
                     printf (" with arg %s", optarg);
                 printf ("\n");
                 break;
-                
+
+            case 'p':
+                arg_pages = _argtobool( optarg );
+                break;
+
             case 's':
                 arg_summarize = _argtobool( optarg );
                 break;
@@ -462,6 +495,10 @@ int main(int argc, char *argv[]) {
 
             case 'P':
                 arg_min_cached_perc = _argtoint( optarg, 0 );
+                break;
+
+            case 'L':
+                arg_vertical = _argtoint( optarg, 1 );
                 break;
 
             case 'h':
@@ -491,6 +528,7 @@ int main(int argc, char *argv[]) {
        printf( "    min size:         %ld\n", arg_min_size );
        printf( "    min cached size:  %ld\n", arg_min_cached_size );
        printf( "    min cached perc:  %ld\n", arg_min_cached_perc );
+       printf( "    vertical:         %ld\n", arg_vertical );
 
    }
 
