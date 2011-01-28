@@ -7,6 +7,6 @@ setup(name='ftools',
     ext_modules=[
           Extension('ftools', ['../fallocate.c','ftools.c'], include_dirs=['..'], define_macros=[('_GNU_SOURCE', 1)])
       ],
-      scripts=['scripts/python_fincore','scripts/python_fadvise','scripts/pages_by_time','scripts/report_filechanges']
+      scripts=['scripts/python_fincore','scripts/python_fadvise']
 )
 
