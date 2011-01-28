@@ -32,6 +32,6 @@ typedef struct fallocate_result
 } fallocate_result;
 
 // need prototypes for the Python module's setup.py's build...
-fallocate_result fallocate(char* path, unsigned long length);
+fallocate_result fallocate(int fd, unsigned long length);
 
 #endif
