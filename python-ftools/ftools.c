@@ -180,17 +180,17 @@ static PyObject *ftools_fadvise(PyObject *self, PyObject *args, PyObject *keywds
 
 // ftools.fallocate
 static PyObject *ftools_fallocate(PyObject *self, PyObject *args, PyObject *keywds) {
-    char* path;
+    int fd;
     unsigned long length;
     fallocate_result result;
-    static char *kwlist[] = {"path", "length", NULL};
+    static char *kwlist[] = {"fd", "length", NULL};
 
-    if (!PyArg_ParseTupleAndKeywords(args, keywds, "sk", kwlist,
-                                     &path, &length)) {
+    if (!PyArg_ParseTupleAndKeywords(args, keywds, "ik", kwlist,
+                                     &fd, &length)) {
         return NULL;
     }
 
-    result = fallocate(path, length);
+    result = fallocate(fd, length);
     if (result.error_state == FALSE) {
         Py_INCREF(Py_None);
         return Py_None;
