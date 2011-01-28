@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
     }
 
     fallocate_result my_result;
-    my_result = fallocate(path, length);
+    my_result = fallocate(fd, length);
     long result = my_result.return_value;
     
     if ( result != 0 ) {
@@ -125,18 +125,15 @@ int main(int argc, char *argv[]) {
 }
 
 
-fallocate_result fallocate(char* path, unsigned long length) {
+fallocate_result fallocate(int fd, unsigned long length) {
 
     fallocate_result result;
     result.error_string = NULL;
     result.return_value = 0;
     result.error_state  = FALSE;
 
-    int flags = O_RDWR;
-    int fd = open( path, flags );
-
     if ( fd == -1 ) {
-        result.error_string = make_error_string("Unable to fallocate: Unable to open file");
+        result.error_string = make_error_string("Unable to fallocate: Invalid file descriptor");
         result.error_state  = TRUE;
         goto cleanup;
     }
@@ -176,7 +173,6 @@ fallocate_result fallocate(char* path, unsigned long length) {
     }
 
  cleanup:
-    close(fd);
     return result;
 }
 

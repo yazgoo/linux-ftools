@@ -12,7 +12,7 @@ def main():
         return
 
     length = 60
-    ftools.fallocate(path=sys.argv[1], length=length)
+    ftools.fallocate(fd=file(sys.argv[1],'rw').fileno(), length=length)
 
 if __name__ == '__main__':
     main()
