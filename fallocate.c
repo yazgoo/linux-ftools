@@ -110,7 +110,7 @@ int main(int argc, char *argv[]) {
             exit( 1 );
         } else {
             char buff[100];
-            sprintf( buff, "Unable to fallocate: %ld\n" , result );
+            sprintf( buff, "Unable to fallocate: %ld" , result );
             perror( buff );
             exit( 1 );
         }
