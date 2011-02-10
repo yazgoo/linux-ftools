@@ -165,11 +165,6 @@ fallocate_result fallocate(int fd, unsigned long length) {
             result.error_state  = TRUE;
             goto cleanup;
         }
-
-        result.error_string = make_error_string("Unable to fallocate");
-        result.error_state  = TRUE;
-        goto cleanup;
-
     }
 
  cleanup:
