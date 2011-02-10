@@ -1,0 +1,107 @@
+
+
+
+What is this anyway?
+--------------------
+Python ftools implements some useful system calls for use in Python programs.
+The mincore system call (called fincore and fincore_ratio in Python ftools)
+tells you how many pages of a file are in filesystem page-cache.
+The fadvise system call can manipulate filesystem page-cache for a given file.
+
+fincore and fincore_ratio take a file descriptor as the argument;
+For instance:
+fd = file(sys.argv[1], 'r')
+
+pages_cached, pages_total = ftools.fincore_ratio(fd.fileno())
+
+and
+
+vector = fincore.fincore(fd.fileno())
+for page in vector:
+    if ord(page) & 0x01:
+        pages_cached += 1
+pages_total = len(vec)
+
+
+Build Python ftools library:
+----------------------------
+build:
+    python setup.py build
+
+If you do not install the Python ftools library system wide then
+make sure it is in your PYTHONPATH like this:
+
+    PYTHONPATH=build/lib.linux-x86_64-2.5/ ./fincore setup.py
+
+
+
+Useful utility programs: fincore and fadvise
+--------------------------------------------
+
+Usage: fincore [options]
+
+Determine how much of a file is in filesystem page-cache.
+
+Options:
+  -h, --help            show this help message and exit
+  -d DIRECTORY, --directory=DIRECTORY
+                        Recursively descend into a directory
+
+
+Usage: fadvise [options]
+
+Advise the Linux kernel to manipulate filesystem page cache for files or
+directories
+
+Options:
+  -h, --help            show this help message and exit
+  -m MODE, --mode=MODE  The modes are: normal - No special treatment. random -
+                        Expect page references in random order. sequential -
+                        Expect page references in sequential order. willneed -
+                        Expect access in the near future. dontneed - Do not
+                        expect access in the near future. Subsequent access of
+                        pages in this range will succeed, but will result
+                        either in reloading of the memory contents from the
+                        underlying mapped file or zero-fill-in-demand pages
+                        for mappings without an underlying file. noreuse -
+                        NOTE: This mode is currently a no-op! Access data only
+                        once.
+  -d DIRECTORY, --directory=DIRECTORY
+                        Recursively descend into a directory
+
+
+fincore example usage:
+
+$ ./fincore -d ../python-ftools/
+filename                                                                   file size    total pages    pages cached    cached size    percentage cached
+../python-ftools/LICENSE                                                   1482         1              0               0              0.0
+../python-ftools/README                                                    2342         1              0               0              0.0
+../python-ftools/ftools.c                                                  5333         2              2               8192           100.0
+../python-ftools/.gitignore                                                6            1              1               4096           100.0
+../python-ftools/fadvise                                                   2003         1              0               0              0.0
+../python-ftools/setup.py                                                  168          1              1               4096           100.0
+../python-ftools/ftools-examples.py                                        1304         1              0               0              0.0
+../python-ftools/fincore                                                   2908         1              1               4096           100.0
+../python-ftools/.git/COMMIT_EDITMSG                                       42           1              1               4096           100.0
+../python-ftools/.git/ORIG_HEAD                                            41           1              1               4096           100.0
+../python-ftools/.git/index                                                632          1              1               4096           100.0
+../python-ftools/.git/packed-refs                                          94           1              1               4096           100.0
+../python-ftools/.git/FETCH_HEAD                                           225          1              1               4096           100.0
+.. blah blah *snip*
+
+Why are some of cached sizes in my above example bigger than the file size?
+It should be obvious; the page size on this machine is 4096 bytes.
+
+
+fadvise example usage:
+
+Perhaps your mysql database doesn't leverage the Innodb buffer pool for caching but instead relies
+on the filesystem page cache. If you could use this to warm up the cold database if the dataset is small
+enough to fit into memory :
+
+./fadvise -m willneed /var/lib/mysql
+
+Or perhaps you'd like to warm up certain Column Families on your Cassandra node:
+./fadvise -m willneed /mnt/var/cassandra/data/fu/Items-*
+
+
