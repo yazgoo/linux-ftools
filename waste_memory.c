@@ -15,8 +15,8 @@ int main(int argc, char *argv[]) {
     //number of bytes we should attempt to allocate.
     unsigned int len = 1 * 1024 * 1024 * 1024;
 
-    if ( argc == 1 ) 
-        len = atoi( argv[0] );
+    if ( argc == 2 ) 
+        len = atoi( argv[1] );
 
     printf( "Allocating %i bytes ...", len );
 
