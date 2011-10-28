@@ -10,15 +10,13 @@
  */
 int main(int argc, char *argv[]) {
 
-    int res;
-
     //number of bytes we should attempt to allocate.
-    unsigned int len = 1 * 1024 * 1024 * 1024;
+    size_t len = 1 * 1024 * 1024 * 1024;
 
     if ( argc == 2 ) 
-        len = atoi( argv[1] );
+        len = atol( argv[1] );
 
-    printf( "Allocating %i bytes ...", len );
+    printf( "Allocating %dl bytes ...", len );
 
     void *buff = malloc( len );
 
@@ -33,6 +31,7 @@ int main(int argc, char *argv[]) {
 
     fflush( stdout );
 
+    printf( "Sleeping to hold memory...\n" );
     sleep( 2147483648 );
 
 }
