@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
     if ( argc == 2 ) 
         len = atol( argv[1] );
 
-    printf( "Allocating %dl bytes ...", len );
+    printf( "Allocating %l bytes ...", len );
 
     void *buff = malloc( len );
 
