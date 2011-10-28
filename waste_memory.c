@@ -8,12 +8,15 @@
 
 /*
  */
-int main() {
+int main(int argc, char *argv[]) {
 
     int res;
 
     //number of bytes we should attempt to allocate.
     unsigned int len = 1 * 1024 * 1024 * 1024;
+
+    if ( argc == 1 ) 
+        len = atoi( argv[0] );
 
     printf( "Allocating %i bytes ...", len );
 
