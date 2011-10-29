@@ -5,6 +5,7 @@
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <errno.h> 
+#include <string.h> 
 
 /*
  */
