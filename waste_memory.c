@@ -16,12 +16,12 @@ int main(int argc, char *argv[]) {
     if ( argc == 2 ) 
         len = atol( argv[1] );
 
-    printf( "Allocating %ll bytes ...", len );
+    printf( "Allocating %ld bytes ...", len );
 
     void *buff = malloc( len );
 
     if ( buff == NULL ) {
-       printf( "\nFailed to malloc." );
+       printf( "\nFailed to malloc.\n" );
        exit( EXIT_FAILURE );
     }
 
