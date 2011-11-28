@@ -1,5 +1,5 @@
-bin_PROGRAMS = fincore fadvise fallocate
+bin_PROGRAMS = fincore linux-fadvise fallocate
 fincore_SOURCES = fincore.c
 fincore_LDADD = -lm
-fadvise_SOURCES = fadvise.c
+linux_fadvise_SOURCES = linux-fadvise.c
 fallocate_SOURCES = fallocate.c
