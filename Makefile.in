@@ -32,7 +32,7 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-bin_PROGRAMS = fincore$(EXEEXT) fadvise$(EXEEXT) \
+bin_PROGRAMS = linux-fincore$(EXEEXT) linux-fadvise$(EXEEXT) \
 	linux-fallocate$(EXEEXT)
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
@@ -50,15 +50,15 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_fadvise_OBJECTS = fadvise.$(OBJEXT)
-fadvise_OBJECTS = $(am_fadvise_OBJECTS)
-fadvise_LDADD = $(LDADD)
-am_fincore_OBJECTS = fincore.$(OBJEXT)
-fincore_OBJECTS = $(am_fincore_OBJECTS)
-fincore_DEPENDENCIES =
+am_linux_fadvise_OBJECTS = linux-fadvise.$(OBJEXT)
+linux_fadvise_OBJECTS = $(am_linux_fadvise_OBJECTS)
+linux_fadvise_LDADD = $(LDADD)
 am_linux_fallocate_OBJECTS = linux-fallocate.$(OBJEXT)
 linux_fallocate_OBJECTS = $(am_linux_fallocate_OBJECTS)
 linux_fallocate_LDADD = $(LDADD)
+am_linux_fincore_OBJECTS = linux-fincore.$(OBJEXT)
+linux_fincore_OBJECTS = $(am_linux_fincore_OBJECTS)
+linux_fincore_DEPENDENCIES =
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -67,10 +67,10 @@ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(fadvise_SOURCES) $(fincore_SOURCES) \
-	$(linux_fallocate_SOURCES)
-DIST_SOURCES = $(fadvise_SOURCES) $(fincore_SOURCES) \
-	$(linux_fallocate_SOURCES)
+SOURCES = $(linux_fadvise_SOURCES) $(linux_fallocate_SOURCES) \
+	$(linux_fincore_SOURCES)
+DIST_SOURCES = $(linux_fadvise_SOURCES) $(linux_fallocate_SOURCES) \
+	$(linux_fincore_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -170,9 +170,9 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-fincore_SOURCES = fincore.c
-fincore_LDADD = -lm
-fadvise_SOURCES = fadvise.c
+linux_fincore_SOURCES = linux-fincore.c
+linux_fincore_LDADD = -lm
+linux_fadvise_SOURCES = linux-fadvise.c
 linux_fallocate_SOURCES = linux-fallocate.c
 all: all-am
 
@@ -249,15 +249,15 @@ uninstall-binPROGRAMS:
 
 clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
-fadvise$(EXEEXT): $(fadvise_OBJECTS) $(fadvise_DEPENDENCIES) 
-	@rm -f fadvise$(EXEEXT)
-	$(LINK) $(fadvise_OBJECTS) $(fadvise_LDADD) $(LIBS)
-fincore$(EXEEXT): $(fincore_OBJECTS) $(fincore_DEPENDENCIES) 
-	@rm -f fincore$(EXEEXT)
-	$(LINK) $(fincore_OBJECTS) $(fincore_LDADD) $(LIBS)
+linux-fadvise$(EXEEXT): $(linux_fadvise_OBJECTS) $(linux_fadvise_DEPENDENCIES) 
+	@rm -f linux-fadvise$(EXEEXT)
+	$(LINK) $(linux_fadvise_OBJECTS) $(linux_fadvise_LDADD) $(LIBS)
 linux-fallocate$(EXEEXT): $(linux_fallocate_OBJECTS) $(linux_fallocate_DEPENDENCIES) 
 	@rm -f linux-fallocate$(EXEEXT)
 	$(LINK) $(linux_fallocate_OBJECTS) $(linux_fallocate_LDADD) $(LIBS)
+linux-fincore$(EXEEXT): $(linux_fincore_OBJECTS) $(linux_fincore_DEPENDENCIES) 
+	@rm -f linux-fincore$(EXEEXT)
+	$(LINK) $(linux_fincore_OBJECTS) $(linux_fincore_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -265,9 +265,9 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fadvise.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fincore.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/linux-fadvise.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/linux-fallocate.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/linux-fincore.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

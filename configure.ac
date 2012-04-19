@@ -2,9 +2,9 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT([linux-ftools], [1.2.0], BUG-REPORT-ADDRESS)
-AC_CONFIG_SRCDIR([fincore.c])
-AM_INIT_AUTOMAKE([linux-ftools], [1.2.0])
+AC_INIT([linux-ftools], [1.3.0], BUG-REPORT-ADDRESS)
+AC_CONFIG_SRCDIR([linux-fincore.c])
+AM_INIT_AUTOMAKE([linux-ftools], [1.3.0])
 #AC_CONFIG_HEADER([config.h])
 
 # Checks for programs.
